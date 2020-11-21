@@ -1,0 +1,32 @@
+{
+    "project_info": {
+        "project_number": "1088583529306",
+        "firebase_url": "https://snackandladders.firebaseio.com",
+        "project_id": "snackandladders",
+        "storage_bucket": "snackandladders.appspot.com"
+    },
+    "client": [{
+        "client_info": {
+            "mobilesdk_app_id": "1:1088583529306:android:7d44b320a351b548dd3963",
+            "android_client_info": {
+                "package_name": "com.android.application"
+            }
+        },
+        "oauth_client": [{
+            "client_id": "1088583529306-r977q10q3pr7f2k6tuvqga4semeppbna.apps.googleusercontent.com",
+            "client_type": 3
+        }],
+        "api_key": [{
+            "current_key": "AIzaSyArhcjZqsQaYGusZayKT1lrMq7h3kOEFyY"
+        }],
+        "services": {
+            "appinvite_service": {
+                "other_platform_oauth_client": [{
+                    "client_id": "1088583529306-r977q10q3pr7f2k6tuvqga4semeppbna.apps.googleusercontent.com",
+                    "client_type": 3
+                }]
+            }
+        }
+    }],
+    "configuration_version": "1"
+}
