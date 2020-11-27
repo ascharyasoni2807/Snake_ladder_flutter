@@ -54,14 +54,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Center(
           child: Column(
             children: <Widget>[
+              SizedBox(
+                height: 10,
+              ),
               Row(
                 children: [
                   SizedBox(
-                    width: 20,
+                    width: 30,
                   ),
-                  Text(
-                    'Hello User :',
-                    style: fontdesign,
+                  Flexible(
+                    child: Text(
+                      'Hello   Player :',
+                      style: fontdesign,
+                    ),
                   ),
                   SizedBox(
                     width: 25,
@@ -74,33 +79,105 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   )
                 ],
               ),
-              Container(
-                width: MediaQuery.of(context).size.width,
+              SizedBox(
+                height: 40,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            'TOTAL GAMEPLAYS :',
+                            style: fontdesign,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            'TOTAL WINS :',
+                            style: fontdesign,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 150),
+
+              Padding(
+                padding: const EdgeInsets.only(left: 76),
                 child: Row(
                   children: [
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'User Email :',
-                      style: GoogleFonts.ultra(
-                          textStyle:
-                              TextStyle(fontSize: 20, color: Colors.white)),
-                    ),
-                    SizedBox(
-                      width: 25,
-                    ),
-                    Flexible(
+                    RaisedButton(
+                      color: Colors.brown[700],
+                      splashColor: Colors.brown[200],
+                      onPressed: () {},
                       child: Text(
-                        "'" + widget.email + "'",
-                        style: GoogleFonts.pacifico(
+                        'CREATE ROOM',
+                        style: GoogleFonts.roboto(
                             textStyle:
-                                TextStyle(fontSize: 20, color: Colors.white)),
+                                TextStyle(fontSize: 13, color: Colors.white)),
                       ),
-                    )
+
+                      // child:
+                    ),
+                    SizedBox(
+                      width: 50,
+                    ),
+                    RaisedButton(
+                      color: Colors.brown[700],
+                      splashColor: Colors.brown[200],
+                      onPressed: () {},
+                      child: Text('JOIN ROOM',
+                          style: GoogleFonts.roboto(
+                              textStyle: TextStyle(
+                                  fontSize: 13, color: Colors.white))),
+                    ),
+
+                    // child:
                   ],
                 ),
               )
+
+              //TO show email oF the User.
+              // Container(
+              //   width: MediaQuery.of(context).size.width,
+              //   child: Row(
+              //     children: [
+              //       SizedBox(
+              //         width: 20,
+              //       ),
+              //       Text(
+              //         'User Email :',
+              //         style: GoogleFonts.ultra(
+              //             textStyle:
+              //                 TextStyle(fontSize: 20, color: Colors.white)),
+              //       ),
+              //       SizedBox(
+              //         width: 25,
+              //       ),
+              //       Flexible(
+              //         child: Text(
+              //           "'" + widget.email + "'",
+              //           style: GoogleFonts.pacifico(
+              //               textStyle:
+              //                   TextStyle(fontSize: 20, color: Colors.white)),
+              //         ),
+              //       )
+              //     ],
+              //   ),
+              // )
             ],
           ),
         ),

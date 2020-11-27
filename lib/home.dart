@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:snake/signin.dart';
 import 'package:snake/profiledata.dart';
 
@@ -15,19 +16,36 @@ class Myhome extends StatefulWidget {
   _MyhomeState createState() => _MyhomeState();
 }
 
+ProgressDialog pr;
+
 class _MyhomeState extends State<Myhome> {
   DatabaseMethods databasesMethods = new DatabaseMethods();
 
   //  Myhome({Key key, @required this.databasesMethods}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    pr = new ProgressDialog(context);
+    pr.style(
+        message: 'Please Wait...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: CircularProgressIndicator(),
+        elevation: 8.0,
+        insetAnimCurve: Curves.easeInOut,
+        progress: 0.0,
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.brown[800],
-        title: Text("Snake And Ladders",
-            style: GoogleFonts.pacifico(
-                textStyle: TextStyle(fontSize: 26, color: Colors.white))),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.brown[800],
+      //   title: Text("Snake And Ladders",
+      //       style: GoogleFonts.pacifico(
+      //           textStyle: TextStyle(fontSize: 26, color: Colors.white))),
+      // ),
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -59,14 +77,20 @@ class _MyhomeState extends State<Myhome> {
                   splashColor: Colors.grey,
                   // ignore: deprecated_member_use
                   onPressed: () {
+                    pr.show();
                     databasesMethods.signInWithGoogle().then((value) {
                       if (value != null) {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProfileScreen(
-                                    name: databasesMethods.name,
-                                    email: databasesMethods.email)));
+                        try {
+                          //  pr.show();
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProfileScreen(
+                                      name: databasesMethods.name,
+                                      email: databasesMethods.email)));
+                        } catch (e) {
+                          print(e);
+                        }
                         print(databasesMethods.email);
                       }
                     });
