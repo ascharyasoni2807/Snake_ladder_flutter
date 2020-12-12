@@ -1,4 +1,4 @@
-# snake
+# snlgame
 
 A new Flutter project.
 

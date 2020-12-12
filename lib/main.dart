@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:snake/gamescreen.dart';
-import 'package:snake/home.dart';
-import 'package:snake/profiledata.dart';
+
+import 'package:snlgame/profiledata.dart';
+//import 'package:snlgame/gamescreen.dart';
+import 'package:snlgame/home.dart';
+//import 'package:snlgame/profiledata.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:snake/signin.dart';
-import 'package:snake/gamescreen.dart';
+//import 'package:snlgame/signin.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';

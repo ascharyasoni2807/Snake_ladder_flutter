@@ -1,8 +1,12 @@
+// import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:snake/signin.dart';
-import 'package:snake/home.dart';
+import 'package:snlgame/signin.dart';
+import 'package:snlgame/home.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({this.name, this.email});
@@ -16,6 +20,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
   var fontdesign = GoogleFonts.ultra(
       textStyle: TextStyle(fontSize: 20, color: Colors.white));
+
+  createroomnymber(rNum) {
+    Map<String, dynamic> roomMap = {
+      "users": "users",
+      "roomId": rNum.toString(),
+    };
+
+    print(rNum);
+    databaseMethods.createRoomid(rNum.toString(), roomMap);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,7 +137,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     RaisedButton(
                       color: Colors.brown[700],
                       splashColor: Colors.brown[200],
-                      onPressed: () {},
+                      onPressed: () async {
+                        // int min =
+                        //     100000; //min and max values act as your 6 digit range
+                        // int max = 999999;
+                        // var randomizer = new Random();
+                        // var rNum = min + randomizer.nextInt(max - min);
+                        // print(rNum);
+                        // createroomnymber(rNum);
+
+                        var url =
+                            'https://sanskrut-interns.appspot.com/apis/createroom';
+                        String token = await DatabaseMethods().getToken();
+                        print(token);
+                        var response = await http.post(url, headers: {
+                          HttpHeaders.authorizationHeader: 'Bearer $token'
+                        });
+                        print(response.body);
+                        print(response.statusCode);
+                        // print(response.body);
+                        // final body = jsonDecode(response.body);
+
+                        // try {
+                        //   return await http
+                        //       .get(url, headers: {"Authorization": token});
+
+                        //   print(token);
+                        //   print('hello');
+                        // } catch (e) {
+                        //   print(e);
+                        // }
+                        ;
+
+                        if (response.statusCode == 200) {
+                          print("body part");
+                        } else {
+                          throw ErrorDescription("error");
+                        }
+                      },
+
                       child: Text(
                         'CREATE ROOM',
                         style: GoogleFonts.roboto(

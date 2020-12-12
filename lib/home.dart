@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:snake/signin.dart';
-import 'package:snake/profiledata.dart';
+import 'package:snlgame/signin.dart';
+import 'package:snlgame/profiledata.dart';
 
 class Myhome extends StatefulWidget {
   Myhome({Key key, this.name, this.email});
