@@ -1,17 +1,20 @@
-// import 'dart:html';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gamesnl/roomscreen.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:snlgame/signin.dart';
-import 'package:snlgame/home.dart';
+import 'package:gamesnl/signin.dart';
+import 'package:gamesnl/home.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({this.name, this.email});
+  ProfileScreen({this.name, this.email, this.uid});
   final String name;
   final String email;
+  final String uid;
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -20,15 +23,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
   var fontdesign = GoogleFonts.ultra(
       textStyle: TextStyle(fontSize: 20, color: Colors.white));
+  String roomToken;
 
-  createroomnymber(rNum) {
-    Map<String, dynamic> roomMap = {
-      "users": "users",
-      "roomId": rNum.toString(),
+  getRoomToken() async {
+    var url = 'https://sanskrut-interns.appspot.com/apis/createRoom';
+    String token = await DatabaseMethods().getToken();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      // 'accept': 'application/json',
+      // HttpHeaders.contentTypeHeader: 'application/json',
     };
-
-    print(rNum);
-    databaseMethods.createRoomid(rNum.toString(), roomMap);
+    var response = await http.get(url, headers: headers);
+    print("response.body====================");
+    print(response.body);
+    var rest = jsonDecode(response.body);
+    final data = rest["room_token"];
+    print(data);
+    // print(response.statusCode);
+    if (response.statusCode == 200) {
+      print("body part");
+      print(data);
+      return data;
+    } else {
+      throw ErrorDescription("error in this");
+    }
   }
 
   @override
@@ -72,27 +90,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(
                 height: 10,
               ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 30,
-                  ),
-                  Flexible(
-                    child: Text(
-                      'Hello   Player :',
-                      style: fontdesign,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        'Hello   Player :',
+                        style: fontdesign,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 25,
-                  ),
-                  Text(
-                    "'" + widget.name + "'",
-                    style: GoogleFonts.pacifico(
-                        textStyle:
-                            TextStyle(fontSize: 28, color: Colors.white)),
-                  )
-                ],
+                    Flexible(
+                      child: Text(
+                        "'" + widget.name + "'",
+                        style: GoogleFonts.pacifico(
+                            textStyle:
+                                TextStyle(fontSize: 16, color: Colors.white)),
+                      ),
+                    )
+                  ],
+                ),
               ),
               SizedBox(
                 height: 40,
@@ -138,42 +156,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: Colors.brown[700],
                       splashColor: Colors.brown[200],
                       onPressed: () async {
-                        // int min =
-                        //     100000; //min and max values act as your 6 digit range
-                        // int max = 999999;
-                        // var randomizer = new Random();
-                        // var rNum = min + randomizer.nextInt(max - min);
-                        // print(rNum);
-                        // createroomnymber(rNum);
-
-                        var url =
-                            'https://sanskrut-interns.appspot.com/apis/createroom';
-                        String token = await DatabaseMethods().getToken();
-                        print(token);
-                        var response = await http.post(url, headers: {
-                          HttpHeaders.authorizationHeader: 'Bearer $token'
-                        });
-                        print(response.body);
-                        print(response.statusCode);
-                        // print(response.body);
-                        // final body = jsonDecode(response.body);
-
-                        // try {
-                        //   return await http
-                        //       .get(url, headers: {"Authorization": token});
-
-                        //   print(token);
-                        //   print('hello');
-                        // } catch (e) {
-                        //   print(e);
-                        // }
-                        ;
-
-                        if (response.statusCode == 200) {
-                          print("body part");
-                        } else {
-                          throw ErrorDescription("error");
-                        }
+                        final roomToken = await getRoomToken();
+                        print('==================');
+                        print(roomToken);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    Roomscreen(roomToken: roomToken)));
                       },
 
                       child: Text(
