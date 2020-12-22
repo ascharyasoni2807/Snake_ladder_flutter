@@ -39,6 +39,7 @@ dependencies:
   progress_dialog: ^1.2.0
   audioplayers: ^0.17.0
   audioplayer: ^0.8.1
+  rflutter_alert: ^1.1.0
 
 dev_dependencies:
   flutter_test:

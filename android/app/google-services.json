@@ -1,0 +1,41 @@
+{
+    "project_info": {
+        "project_number": "514793907608",
+        "firebase_url": "https://sanskrut-interns.firebaseio.com",
+        "project_id": "sanskrut-interns",
+        "storage_bucket": "sanskrut-interns.appspot.com"
+    },
+    "client": [{
+        "client_info": {
+            "mobilesdk_app_id": "1:514793907608:android:b911d16e6d78fd5833f7ed",
+            "android_client_info": {
+                "package_name": "com.domain.gamesnl.gamesnl"
+            }
+        },
+        "oauth_client": [{
+                "client_id": "514793907608-5dp6495a3glggvvh0ote27ar5jjuhiai.apps.googleusercontent.com",
+                "client_type": 1,
+                "android_info": {
+                    "package_name": "com.domain.gamesnl.gamesnl",
+                    "certificate_hash": "d9cdd1aa46c73236cff62121b20d4e631a0e8317"
+                }
+            },
+            {
+                "client_id": "514793907608-actvmgjjlq2uk62ml68c70bs0k06u0fk.apps.googleusercontent.com",
+                "client_type": 3
+            }
+        ],
+        "api_key": [{
+            "current_key": "AIzaSyDOzT0y93JC2x4RMtr1Ayz-u1KDWSDytRc"
+        }],
+        "services": {
+            "appinvite_service": {
+                "other_platform_oauth_client": [{
+                    "client_id": "514793907608-actvmgjjlq2uk62ml68c70bs0k06u0fk.apps.googleusercontent.com",
+                    "client_type": 3
+                }]
+            }
+        }
+    }],
+    "configuration_version": "1"
+}

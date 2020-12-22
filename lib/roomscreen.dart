@@ -1,7 +1,9 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:gamesnl/profiledata.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Roomscreen extends StatefulWidget {
   final int roomToken;
@@ -48,6 +50,51 @@ class _RoomscreenState extends State<Roomscreen> {
                 style: GoogleFonts.roboto(
                     textStyle: TextStyle(fontSize: 25, color: Colors.white)),
               ),
+            ),
+            Container(
+              width: 250,
+              child: Align(
+                  alignment: Alignment.center,
+                  child: RaisedButton(
+                      onPressed: () {
+                        setState(() {
+                          Alert(
+                              context: context,
+                              title: "Room Code",
+                              content: Column(
+                                children: <Widget>[
+                                  TextField(
+                                    decoration: InputDecoration(
+                                      //icon: Icon(Icons.account_circle),
+                                      labelText: 'Enter Room Code',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              buttons: [
+                                DialogButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return ProfileScreen();
+                                        },
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    "Go",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                )
+                              ]).show();
+                        });
+                      },
+                      splashColor: Colors.grey,
+                      color: Colors.white,
+                      child: Text('Enter Room Code'))),
             ),
             Container(
               width: 250,
