@@ -1,14 +1,15 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gamesnl/listenplayers.dart';
 import 'package:gamesnl/roomscreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gamesnl/signin.dart';
 import 'package:gamesnl/home.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_database/firebase_database.dart';
 import 'dart:io';
 
 class ProfileScreen extends StatefulWidget {
@@ -22,14 +23,15 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  DatabaseMethods databaseMethods = new DatabaseMethods();
+  DatabaseMethods databaseMethods = dbInstance;
+  FirebaseAuth auth = FirebaseAuth.instance;
   var fontdesign = GoogleFonts.ultra(
       textStyle: TextStyle(fontSize: 20, color: Colors.white));
   String roomToken;
   TextEditingController rcodecontroller = new TextEditingController();
   getRoomToken() async {
     var url = 'https://sanskrut-interns.appspot.com/apis/createRoom';
-    String token = await DatabaseMethods().getToken();
+    String token = await dbInstance.getToken();
     final headers = {
       'Authorization': 'Bearer $token',
       // 'accept': 'application/json',
@@ -51,27 +53,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  joinRoom() async {
-    var url = 'https://sanskrut-interns.appspot.com/apis/joinroom';
-    String token = await DatabaseMethods().getToken();
-    final headers = {
-      'Authorization': 'Bearer $token',
-      // 'accept': 'application/json',
-      // HttpHeaders.contentTypeHeader: 'application/json',
-    };
-    var response = await http.get(url, headers: headers);
-    print("response.body====================");
-    print(response.body);
-    var rest = jsonDecode(response.body);
-    final data = rest["room_token"];
-    print(data);
-    // print(response.statusCode);
-    if (response.statusCode == 200) {
-      print("body part");
-      print(data);
-      return data;
+  joinRoom(rcodecontroller) async {
+    // print('hello' + rcodecontroller);
+    String token = await dbInstance.getToken();
+
+    String roomtoken = rcodecontroller;
+    var names = widget.name;
+    var uids = widget.uid;
+    print('oohhhh' + roomtoken);
+    getUsers() {
+      return auth.currentUser;
+    }
+
+    final db = FirebaseDatabase.instance.reference().child('/rooms');
+    print('room_' + roomtoken.toString());
+    final DataSnapshot snapshot = await db.once();
+    //print(resp);
+    dynamic a = snapshot.value;
+
+    // print(a['room_' + roomtoken]);
+    if (a['room_' + roomtoken] = true) {
+      var url = 'https://sanskrut-interns.appspot.com/apis/joinroom';
+
+      // var url = 'https://localhost:8080/apis/joinroom';
+      final headers = {
+        'Authorization': 'Bearer $token',
+        HttpHeaders.contentTypeHeader: 'application/json'
+      };
+
+      final data = {'enterid': roomtoken, 'entername': names, 'uid': uids};
+      String body = jsonEncode(data);
+      try {
+        var resp = await http.post(url, headers: headers, body: body);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    Roomscreen(roomToken: roomtoken.toString())));
+      } catch (error) {
+        print(error);
+      }
     } else {
-      throw ErrorDescription("error in this");
+      print('no');
     }
   }
 
@@ -202,7 +225,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Roomscreen(
-                                        roomToken: roomToken,
+                                        roomToken: roomToken.toString(),
                                         name: widget.name)));
                           },
 
@@ -260,10 +283,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     DialogButton(
                                       width: 200,
                                       color: Colors.brown[400],
-                                      onPressed: () {
+                                      onPressed: () async {
                                         print(rcodecontroller.text);
+                                        await joinRoom(rcodecontroller.text);
+
                                         rcodecontroller.clear();
-                                        joinRoom();
 
                                         // Navigator.push(
                                         //   context,

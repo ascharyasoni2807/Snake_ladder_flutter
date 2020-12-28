@@ -1,33 +1,57 @@
-// import 'dart:html';
-
+// import 'dart:htm
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gamesnl/signin.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class Roomscreen extends StatefulWidget {
-  final int roomToken;
+  final String roomToken;
   final String name;
 
-  Roomscreen({this.roomToken, this.name});
+  Roomscreen({this.roomToken, this.name = "hi"});
 
   @override
   _RoomscreenState createState() => _RoomscreenState();
 }
 
 class _RoomscreenState extends State<Roomscreen> {
-  DatabaseMethods databaseMethods = new DatabaseMethods();
+  DatabaseMethods databaseMethods = dbInstance;
+  String name = dbInstance.name;
+  List players = [];
+  List positions = [];
+  var databseReference;
+  listenplayers(roomTokenn) async {
+    print(roomTokenn);
+    print("listenplayers================");
+    final roomtokens = roomTokenn;
+    databseReference.once().then((DataSnapshot snapshot) {
+      final Map value = snapshot.value;
+      setState(() {
+        players = value.values.toList();
+      });
+    });
+  }
 
-  String name = DatabaseMethods().name;
+  @override
+  void initState() {
+    print(databaseMethods.uid);
+    // TODO: implement initState
+    super.initState();
+    databseReference = FirebaseDatabase.instance
+        .reference()
+        .child('/rooms/room_' + widget.roomToken.toString() + '/players');
+    listenplayers(widget.roomToken);
+    databseReference.onChildAdded.listen((_) {
+      listenplayers(widget.roomToken);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // appBar: AppBar(
-        //   backgroundColor: Colors.brown[800],
-        //   title: Text("Snake And Ladders",
-        //       style: GoogleFonts.pacifico(
-        //           textStyle: TextStyle(fontSize: 26, color: Colors.white))),
-        // ),
         body: Container(
           decoration: BoxDecoration(
               image: DecorationImage(
@@ -49,7 +73,7 @@ class _RoomscreenState extends State<Roomscreen> {
                         "Room Creater : ",
                         style: GoogleFonts.roboto(
                             textStyle:
-                                TextStyle(fontSize: 19, color: Colors.white)),
+                                TextStyle(fontSize: 20, color: Colors.white)),
                       ),
                     ),
                     Container(
@@ -57,17 +81,21 @@ class _RoomscreenState extends State<Roomscreen> {
                         width: 20,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage('assets/images/tok1.png')),
+                              image: AssetImage('assets/images/tok0.png')),
                         )),
                     SizedBox(
                       width: 2,
                     ),
                     Container(
-                      child: Text(
-                        widget.name,
-                        style: GoogleFonts.roboto(
-                            textStyle:
-                                TextStyle(fontSize: 19, color: Colors.white)),
+                      child: Expanded(
+                        child: Text(
+                          players.length > 0
+                              ? players[0]['name']
+                              : "Loading Creator...",
+                          style: GoogleFonts.roboto(
+                              textStyle:
+                                  TextStyle(fontSize: 20, color: Colors.white)),
+                        ),
                       ),
                     ),
                   ],
@@ -91,26 +119,76 @@ class _RoomscreenState extends State<Roomscreen> {
                       textStyle: TextStyle(fontSize: 25, color: Colors.white)),
                 ),
               ),
-
-              // Container(
-              //   height: 250,
-              //   width: MediaQuery.of(context).size.width*.90
-              //   child: ListenPlayers(widget.roomToken),
-              // )
-
-              Container(
-                width: 250,
-                child: Align(
-                    alignment: Alignment.center,
-                    child: RaisedButton(
-                        onPressed: () {
-                          print(widget.roomToken);
-                          print(widget.name);
-                        },
-                        splashColor: Colors.grey,
-                        color: Colors.white,
-                        child: Text('Start'))),
+              SizedBox(
+                height: 30,
               ),
+              Container(
+                height: 50,
+                child: Text('Joined Players:',
+                    style: GoogleFonts.roboto(
+                        textStyle:
+                            TextStyle(fontSize: 25, color: Colors.white))),
+              ),
+              Container(
+                //   color: Colors.white,
+                height: 150,
+                width: MediaQuery.of(context).size.width,
+                child: players.length > 0
+                    ? ListView.builder(
+                        itemBuilder: (BuildContext context, int i) {
+                          return i == 0
+                              ? SizedBox.shrink()
+                              : ListTile(
+                                  title: Row(
+                                    children: [
+                                      Container(
+                                          height: 20,
+                                          width: 20,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/images/tok$i.png')),
+                                          )),
+                                      SizedBox(
+                                        width: 2,
+                                      ),
+                                      Text(
+                                        players[i]['name'],
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                fontSize: 25,
+                                                color: Colors.white,
+                                                fontWeight: i == 0
+                                                    ? FontWeight.bold
+                                                    : FontWeight.normal)),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                        },
+                        itemCount: players.length,
+                      )
+                    : CircularProgressIndicator(),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              players.length > 0 && dbInstance.uid == players[0]['playerUID']
+                  ? RaisedButton(
+                      color: Colors.brown[700],
+                      splashColor: Colors.brown[200],
+                      onPressed: () {},
+
+                      child: Text(
+                        'Start Game',
+                        style: GoogleFonts.roboto(
+                            textStyle:
+                                TextStyle(fontSize: 13, color: Colors.white)),
+                      ),
+
+                      // child:
+                    )
+                  : SizedBox.shrink()
             ],
           ),
         ),

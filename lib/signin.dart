@@ -3,24 +3,27 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:snlgame/profiledata.dart';
+import 'package:gamesnl/profiledata.dart';
 
 class DatabaseMethods {
   String name;
   String email;
+  String uid;
   User user;
+
   //DatabaseMethods();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   Future<String> getToken() async {
-    return await _auth.currentUser.getIdToken();
+    return await _auth.currentUser.getIdToken(true);
   }
 
   Future<String> signInWithGoogle() async {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAccount googleSignInAccount =
+        await GoogleSignIn().signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
 
@@ -28,6 +31,8 @@ class DatabaseMethods {
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
+    print('=====================');
+    print(IdTokenResult);
 
     final UserCredential authResult =
         await _auth.signInWithCredential(credential);
@@ -41,6 +46,7 @@ class DatabaseMethods {
       assert(user.displayName != null);
       name = user.displayName;
       email = user.email;
+      uid = user.uid;
       if (name.contains(" ")) {
         name = name.substring(0, name.indexOf(" "));
       }
@@ -59,14 +65,6 @@ class DatabaseMethods {
     await googleSignIn.signOut();
     print('User Signed Out');
   }
-
-  createRoomid(String roomnumber, dynamic roomMap) {
-    FirebaseFirestore.instance
-        .collection("RoomId")
-        .doc(roomnumber)
-        .set(roomMap)
-        .catchError((e) {
-      print(e.toString());
-    });
-  }
 }
+
+final DatabaseMethods dbInstance = DatabaseMethods();

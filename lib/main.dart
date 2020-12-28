@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:gamesnl/gamescreen.dart';
 
-import 'package:snlgame/profiledata.dart';
+import 'package:gamesnl/profiledata.dart';
 //import 'package:snlgame/gamescreen.dart';
-import 'package:snlgame/home.dart';
+import 'package:gamesnl/home.dart';
 //import 'package:snlgame/profiledata.dart';
 import 'package:firebase_core/firebase_core.dart';
 //import 'package:snlgame/signin.dart';

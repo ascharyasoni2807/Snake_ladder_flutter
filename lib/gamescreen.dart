@@ -66,11 +66,11 @@ class _BoardState extends State<Board> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-          height: 410,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/images/board.png'),
-                  fit: BoxFit.fitHeight)),
+          height: 420,
+          // decoration: BoxDecoration(
+          //     image: DecorationImage(
+          //         image: AssetImage('assets/images/board.png'),
+          //         fit: BoxFit.fitHeight)),
           //  color: Colors.blue,
           child: GridView.builder(
             itemCount: 100,

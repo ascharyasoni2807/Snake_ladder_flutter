@@ -1,4 +1,4 @@
-# snlgame
+# gamesnl
 
 A new Flutter project.
 
