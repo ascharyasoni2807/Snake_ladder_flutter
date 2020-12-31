@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gamesnl/profiledata.dart';
+import 'package:gamesnl/Helperfunctions.dart';
 
 class DatabaseMethods {
   String name;
@@ -40,6 +41,8 @@ class DatabaseMethods {
     user = authResult.user;
 
     if (user != null) {
+      bool isSignedIn = await googleSignIn.isSignedIn();
+      HelperFunctions.saveUserLoggedInSharedPreference(true);
       assert(!user.isAnonymous);
       assert(await user.getIdToken() != null);
       assert(user.email != null);

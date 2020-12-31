@@ -41,6 +41,7 @@ dependencies:
   audioplayer: ^0.8.1
   rflutter_alert: ^1.1.0
   firebase_database: ^4.4.0
+  shared_preferences: ^0.5.12+4
 
 dev_dependencies:
   flutter_test:

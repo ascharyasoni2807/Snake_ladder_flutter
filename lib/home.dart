@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:gamesnl/Helperfunctions.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -10,6 +11,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:gamesnl/signin.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gamesnl/profiledata.dart';
 
 final String endpointBase = 'https://sanskrut-interns.appspot.com/apis';
@@ -114,13 +116,16 @@ class _MyhomeState extends State<Myhome> {
                   // ignore: deprecated_member_use
                   onPressed: () {
                     pr.show();
-                    databasesMethods.signInWithGoogle().then((value) {
+                    databasesMethods.signInWithGoogle().then((value) async {
                       // print(value);
 
                       if (value != null) {
                         var emails = databasesMethods.email;
+
                         var names = databasesMethods.name;
                         var uids = databasesMethods.uid;
+                        //   HelperFunctions.saveUserLoggedInSharedPreference(true);
+
                         try {
                           setUser(names, emails, uids);
                           //  pr.show();

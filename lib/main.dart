@@ -11,12 +11,17 @@ import 'package:firebase_core/firebase_core.dart';
 //import 'package:snlgame/signin.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
+
+import 'Helperfunctions.dart';
 
 ProgressDialog pr;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
+
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: MyApp(),
@@ -29,18 +34,34 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool userIsloggedIn = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    //  getLoggedInfo();
     Future.delayed(
       Duration(seconds: 3),
       () {
+        // userIsloggedIn
+        //     ? Navigator.pushReplacement(context,
+        //         MaterialPageRoute(builder: (context) => ProfileScreen()))
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Myhome()));
+            context, MaterialPageRoute(builder: (context) => BoardScreen()));
       },
     );
   }
+
+  // getLoggedInfo() async {
+  //   await HelperFunctions.getUserLoggedInSharedPreference().then((value) {
+  //     setState(() {
+  //       print(value);
+  //       print("batao");
+  //       userIsloggedIn = value;
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

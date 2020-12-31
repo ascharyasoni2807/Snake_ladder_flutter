@@ -37,99 +37,129 @@ class _BoardState extends State<Board> {
     });
   }
 
-  int diceNumber = 1;
+  int diceNumber = null;
   int playerNumber = 1;
-  void changeDiceFace() {
+
+  int changeDiceFace() {
     Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
+        print(diceNumber);
         playSound();
         diceNumber = Random().nextInt(6) + 1;
         diceNumber == 6 ? playerNumber = playerNumber : playerNumber++;
         if (playerNumber == 5) {
           playerNumber = 1;
         }
+        print(diceNumber);
       });
     });
+    return diceNumber;
   }
 
-  createroom() {
-    Map<String, dynamic> roomMap = {
-      "users": "name",
-      "chatroomId": "roomnumber",
-    };
-  }
+  // createroom() {
+  //   Map<String, dynamic> roomMap = {
+  //     "users": "name",
+  //     "chatroomId": "roomnumber",
+  //   };
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          height: 420,
-          // decoration: BoxDecoration(
-          //     image: DecorationImage(
-          //         image: AssetImage('assets/images/board.png'),
-          //         fit: BoxFit.fitHeight)),
-          //  color: Colors.blue,
-          child: GridView.builder(
-            itemCount: 100,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 10,
-              //  childAspectRatio: 1.1,
+    return SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            //margin: EdgeInsets.only(top: 5),
+            height: 413,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              image: DecorationImage(
+                  image: AssetImage('assets/images/board3.png'),
+                  fit: BoxFit.fill),
             ),
-            itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
-                onTap: () => print(index),
-                child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.yellow[700])),
-                    child: Center(
-                      child: Text(
-                        '$index',
-                        // index.toString(),
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                    )
+            // decoration: BoxDecoration(
+            //     image: DecorationImage(
+            //         image: AssetImage('assets/images/board.png'),
+            //         fit: BoxFit.fitHeight)),
+            //  color: Colors.blue,
+            child: GridView.builder(
+              itemCount: 100,
+              reverse: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 10,
+                //  childAspectRatio: 1.1,
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                //  key:
+                // list[index];
+                return Stack(children: [
+                  index == position()
+                      ? Container(
+                          height: 20,
+                          alignment: Alignment.bottomCenter,
+                          child: Image.asset('assets/images/tok1.png'),
+                        )
+                      : SizedBox.shrink(),
+                  Container(
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.black)),
+                    child: Center(child: Text(((index) + 1).toString()))
                     // color: Colors.yellow,
-                    // child: Text('$index'),
-                    ),
-              );
-            },
-          ),
-          //s color: Colors.blue,
+                    ,
+                  ),
+                ]);
+              },
+            ),
+            //s color: Colors.blue,
 
-          //     Image.asset('assets/images/board.png')
-        ),
+            //     Image.asset('assets/images/board.png')
+          ),
 
-        //Image.asset('assets/images/board.png'),
-        SizedBox(height: 10),
-        Center(
-          child: Text(
-            'Tap on Dice to play',
-            style: TextStyle(color: Colors.white, fontSize: 20.0),
+          //Image.asset('assets/images/board.png'),
+          SizedBox(height: 10),
+          Center(
+            child: Text(
+              'Tap on Dice to play',
+              style: TextStyle(color: Colors.white, fontSize: 20.0),
+            ),
           ),
-        ),
-        SizedBox(height: 10),
-        Center(
-          child: Text(
-            'Player $playerNumber',
-            style: TextStyle(color: Colors.white, fontSize: 20.0),
+          SizedBox(height: 10),
+          Center(
+            child: Text(
+              'Player $playerNumber',
+              style: TextStyle(color: Colors.white, fontSize: 20.0),
+            ),
           ),
-        ),
-        SizedBox(height: 10),
-        Container(
-          height: 90,
-          width: 60,
-          //   color: Colors.white,
-          child: FlatButton(
-            onPressed: () {
-              changeDiceFace();
-            },
-            child: Image.asset('assets/images/$diceNumber.png'),
-          ),
-        )
-      ],
+          SizedBox(height: 10),
+          Container(
+            height: 80,
+            width: 20,
+            //   color: Colors.white,
+            child: FlatButton(
+              //height: 40,
+              //minWidth: 20,
+              onPressed: () {
+                index = valuess(index);
+                changeDiceFace();
+              },
+              child: Image.asset('assets/images/$diceNumber.png'),
+            ),
+          )
+        ],
+      ),
     );
   }
+
+  Object value(index, dicenumber) {
+    var a = index + diceNumber;
+    print('====');
+    print(a);
+
+    //  print(diceNumber);
+    return a;
+  }
+
+  Object position() {}
 }
