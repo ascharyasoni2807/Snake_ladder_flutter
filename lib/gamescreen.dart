@@ -1,23 +1,35 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:gamesnl/signin.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class BoardScreen extends StatelessWidget {
+  final roomToken;
+  BoardScreen({this.roomToken});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/wooden.jpg'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: SafeArea(
-            child: Board(),
-          ),
+      debugShowCheckedModeBanner: false,
+      home: SafeArea(
+        child: Scaffold(
+          body: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/wooden.jpg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 0.5),
+                child: Board(roomToken: roomToken),
+              )),
         ),
       ),
     );
@@ -25,11 +37,16 @@ class BoardScreen extends StatelessWidget {
 }
 
 class Board extends StatefulWidget {
+  final roomToken;
+  Board({this.roomToken});
+
   @override
   _BoardState createState() => _BoardState();
 }
 
 class _BoardState extends State<Board> {
+  DatabaseMethods databaseMethods = dbInstance;
+  int memberChance = 1;
   void playSound() {
     setState(() {
       final player1 = AudioCache();
@@ -37,23 +54,158 @@ class _BoardState extends State<Board> {
     });
   }
 
-  int diceNumber = null;
+  getCurrentUser() {
+    var currentuser = dbInstance.user;
+    print(currentuser);
+  }
+
+  int diceNumber = 0;
   int playerNumber = 1;
 
-  int changeDiceFace() {
-    Future.delayed(const Duration(milliseconds: 500), () {
-      setState(() {
-        print(diceNumber);
-        playSound();
-        diceNumber = Random().nextInt(6) + 1;
-        diceNumber == 6 ? playerNumber = playerNumber : playerNumber++;
-        if (playerNumber == 5) {
-          playerNumber = 1;
-        }
-        print(diceNumber);
-      });
+  List playersin = [];
+  //final List positions = [];
+
+  readPlayers() {
+    var rtoken = widget.roomToken;
+    print(rtoken);
+    final db = FirebaseDatabase.instance
+        .reference()
+        .child('/rooms/room_' + rtoken.toString() + '/players');
+    print('room_' + rtoken.toString() + 'ooooooooooooooooooo');
+    db.once().then((DataSnapshot snapshot) {
+      final Map value = snapshot.value;
+      playersin = value.values.toList();
+      print(playersin);
+      List naming = [];
+      for (var i = 0; i <= playersin.length - 1; i++) {
+        naming.add(playersin[i]['name']);
+      }
+      setState(() {});
+      print(naming);
+      return naming;
+      //var a = snapshot.value;
+      //   print(a);
     });
-    return diceNumber;
+  }
+
+  boardValue(currentPlayerPos, whichPlayer, diceVal) async {
+    var url =
+        'https://sanskrut-interns.appspot.com/apis/board/:${widget.roomToken}';
+
+    // var url = 'https://localhost:8080/apis/joinroom';
+    final headers = {
+      'Authorization': 'Bearer ${widget.roomToken}',
+      // HttpHeaders.contentTypeHeader: 'application/json'
+    };
+
+    final body = {
+      'memberChance': whichPlayer,
+      'position': currentPlayerPos,
+      'dice': diceVal
+    };
+
+    String data = jsonEncode(body);
+
+    var response = await http.post(url, headers: headers, body: data);
+    print(response.body);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print('updated');
+    }
+  }
+
+  playerPosition() {
+    FirebaseDatabase.instance
+        .reference()
+        .child('/rooms/room_' + widget.roomToken.toString() + '/players')
+        .once()
+        .then((DataSnapshot snapshot) {
+      print('in playerposition');
+      print(snapshot.value);
+      final Map val = snapshot.value;
+      List values = [];
+      values = val.values.toList();
+      //  print(values[0]['position']);
+      List positions = [];
+      for (var i = 0; i < values.length; i++) {
+        print(values[i]['name']);
+        positions.add(values[i]['position']);
+        // print(positions);
+      }
+      print(positions);
+      final mem = memberChance;
+      positions[mem - 1] = positions[mem - 1] + diceNumber;
+      print(positions);
+      if (positions[mem - 1] == 100) {
+        print('winner mem cahnce');
+        // winner();
+      } else if (positions[mem - 1] > 100) {
+        positions[mem - 1] = positions[mem - 1] + diceNumber;
+        print(playersin[mem - 1] + ' new position is =' + positions[mem - 1]);
+      } else {
+        print(playersin[mem - 1].toString() +
+            ' new position is =' +
+            positions[mem - 1].toString());
+      }
+
+      boardValue(positions[mem - 1], memberChance, diceNumber);
+      //return positions;
+    });
+  }
+
+  // liveDice() {
+  //   FirebaseDatabase.instance
+  //       .reference()
+  //       .child('/rooms/room_' + widget.roomToken.toString())
+  //       .onValue
+  //       .listen((event) {
+  //     print(event.snapshot.value['dice']);
+  //     diceNumber = event.snapshot.value['dice'];
+  //     setState(() {});
+  //   });
+  // }
+
+  @override
+  void initState() {
+    Board();
+    readPlayers();
+    playerPosition();
+    print(widget.roomToken);
+    getCurrentUser();
+    // setState(() {
+    //   // liveDice();
+    // });
+
+    //print(widget.roomToken + '==================');
+  }
+
+  Future<int> rollDiceChance() async {
+    var url = 'https://sanskrut-interns.appspot.com/apis/board';
+    String token = await dbInstance.getToken();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      // 'accept': 'application/json',
+      // HttpHeaders.contentTypeHeader: 'application/json',
+    };
+    var response = await http.get(url, headers: headers);
+    // print("response.body====================");
+    // print(response.body);
+    var rest = jsonDecode(response.body);
+    final data = rest["dice_value"];
+
+    setState(() {
+      diceNumber = data;
+    });
+
+    // print(response.statusCode);
+    if (response.statusCode == 200) {
+      print("body part");
+      // print(data);
+      playerPosition();
+      return diceNumber;
+    } else {
+      throw ErrorDescription("error in this");
+    }
   }
 
   // createroom() {
@@ -67,12 +219,12 @@ class _BoardState extends State<Board> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
             //margin: EdgeInsets.only(top: 5),
-            height: 413,
+            height: 410,
             decoration: BoxDecoration(
               color: Colors.white,
               image: DecorationImage(
@@ -94,14 +246,15 @@ class _BoardState extends State<Board> {
               itemBuilder: (BuildContext context, int index) {
                 //  key:
                 // list[index];
+
                 return Stack(children: [
-                  index == position()
-                      ? Container(
-                          height: 20,
-                          alignment: Alignment.bottomCenter,
-                          child: Image.asset('assets/images/tok1.png'),
-                        )
-                      : SizedBox.shrink(),
+                  // index == a
+                  Container(
+                    height: 20,
+                    alignment: Alignment.bottomCenter,
+                    //   child: Image.asset('assets/images/tok1.png'),
+                  ),
+                  // : SizedBox.shrink(),
                   Container(
                     decoration:
                         BoxDecoration(border: Border.all(color: Colors.black)),
@@ -119,13 +272,7 @@ class _BoardState extends State<Board> {
 
           //Image.asset('assets/images/board.png'),
           SizedBox(height: 10),
-          Center(
-            child: Text(
-              'Tap on Dice to play',
-              style: TextStyle(color: Colors.white, fontSize: 20.0),
-            ),
-          ),
-          SizedBox(height: 10),
+
           Center(
             child: Text(
               'Player $playerNumber',
@@ -133,33 +280,104 @@ class _BoardState extends State<Board> {
             ),
           ),
           SizedBox(height: 10),
-          Container(
-            height: 80,
-            width: 20,
-            //   color: Colors.white,
-            child: FlatButton(
-              //height: 40,
-              //minWidth: 20,
-              onPressed: () {
-                index = valuess(index);
-                changeDiceFace();
-              },
-              child: Image.asset('assets/images/$diceNumber.png'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Container(
+              height: 200,
+              width: MediaQuery.of(context).size.width,
+              // alignment: Alignment.bottomRight,
+              //   color: Colors.white,
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        height: 80,
+                        child: FlatButton(
+                          //height: 40,
+                          //minWidth: 20,
+                          onPressed: () async {
+                            //  index = valuess(index);
+                            //    changeDiceFace();
+                            playSound();
+                            diceNumber = await rollDiceChance();
+                            playerPosition();
+                            //liveDice();
+                            //  playSound();
+                            print('======');
+                            print(diceNumber);
+                          },
+                          child: Image.asset('assets/images/$diceNumber.png'),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: Container(
+                      //color: Colors.white,
+                      height: 230,
+                      width: MediaQuery.of(context).size.width,
+                      child: playersin.length > 0
+                          ? ListView.builder(
+                              itemBuilder: (BuildContext context, int i) {
+                                return ListTile(
+                                  title: Row(
+                                    children: [
+                                      Container(
+                                          height: 10,
+                                          width: 10,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/images/tok$i.png')),
+                                          )),
+                                      SizedBox(
+                                        width: 2,
+                                      ),
+                                      Text(
+                                        playersin[i]['name'],
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white,
+                                                fontWeight: i == 0
+                                                    ? FontWeight.bold
+                                                    : FontWeight.normal)),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              itemCount: playersin.length,
+                            )
+                          : CircularProgressIndicator(),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          )
+          ),
+          //  Container(alignment: Alignment.centerLeft, child: readPlayers())
         ],
       ),
     );
   }
 
-  Object value(index, dicenumber) {
-    var a = index + diceNumber;
-    print('====');
-    print(a);
+  // Object value(index, dicenumber) {
+  //   var a = index + diceNumber;
+  //   print('====');
+  //   print(a);
 
-    //  print(diceNumber);
-    return a;
-  }
+  //   //  print(diceNumber);
+  //   return a;
+  // }
 
-  Object position() {}
+  // Object position(index) {
+  //   var a = index + diceNumber;
+  //   return a;
+  // }
 }

@@ -84,12 +84,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final data = {'enterid': roomtoken, 'entername': names, 'uid': uids};
       String body = jsonEncode(data);
       try {
-        var resp = await http.post(url, headers: headers, body: body);
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    Roomscreen(roomToken: roomtoken.toString())));
+        final dbs = FirebaseDatabase.instance
+            .reference()
+            .child('/rooms/room_' + roomtoken.toString());
+        final DataSnapshot snapshot = await dbs.once();
+        dynamic tempstatevalue = snapshot.value;
+        print(tempstatevalue['tempState']);
+        if (tempstatevalue['tempState'] = true) {
+          print('already statred');
+          return showDialog<void>(
+              context: context,
+              barrierDismissible: false, // user must tap button!
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: Colors.brown[600],
+                  title: Text(
+                    'Already Started',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('close'),
+                      onPressed: () {
+                        pr.hide();
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              });
+        } else {
+          var resp = await http.post(url, headers: headers, body: body);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      Roomscreen(roomToken: roomtoken.toString())));
+        }
       } catch (error) {
         print(error);
       }
@@ -168,41 +199,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         "'" + widget.name + "'",
                         style: GoogleFonts.pacifico(
                             textStyle:
-                                TextStyle(fontSize: 16, color: Colors.white)),
+                                TextStyle(fontSize: 18, color: Colors.white)),
                       ),
                     )
                   ],
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 30,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Column(
                     children: [
-                      Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              'TOTAL GAMEPLAYS :',
-                              style: fontdesign,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              'TOTAL WINS :',
-                              style: fontdesign,
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     Flexible(
+                      //       child: Text(
+                      //         'TOTAL GAMEPLAYS :',
+                      //         style: fontdesign,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // SizedBox(
+                      //   height: 50,
+                      // ),
+                      // Row(
+                      //   children: [
+                      //     Flexible(
+                      //       child: Text(
+                      //         'TOTAL WINS :',
+                      //         style: fontdesign,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),
@@ -281,10 +312,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   buttons: [
                                     DialogButton(
-                                      width: 200,
+                                      width: 180,
                                       color: Colors.brown[400],
                                       onPressed: () async {
                                         print(rcodecontroller.text);
+                                        pr.show();
                                         await joinRoom(rcodecontroller.text);
 
                                         rcodecontroller.clear();

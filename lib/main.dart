@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
         //     ? Navigator.pushReplacement(context,
         //         MaterialPageRoute(builder: (context) => ProfileScreen()))
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => BoardScreen()));
+            context, MaterialPageRoute(builder: (context) => Myhome()));
       },
     );
   }

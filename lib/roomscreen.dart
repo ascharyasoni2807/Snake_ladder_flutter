@@ -1,4 +1,7 @@
 // import 'dart:htm
+import 'dart:convert';
+import 'package:gamesnl/gamescreen.dart';
+import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +13,7 @@ class Roomscreen extends StatefulWidget {
   final String roomToken;
   final String name;
 
-  Roomscreen({this.roomToken, this.name = "hi"});
+  Roomscreen({this.roomToken, this.name});
 
   @override
   _RoomscreenState createState() => _RoomscreenState();
@@ -21,8 +24,12 @@ class _RoomscreenState extends State<Roomscreen> {
   String name = dbInstance.name;
   List players = [];
   List positions = [];
-  var databseReference;
+  List tempState = [];
+
   listenplayers(roomTokenn) async {
+    var databseReference = FirebaseDatabase.instance
+        .reference()
+        .child('/rooms/room_' + widget.roomToken.toString() + '/players');
     print(roomTokenn);
     print("listenplayers================");
     final roomtokens = roomTokenn;
@@ -34,8 +41,65 @@ class _RoomscreenState extends State<Roomscreen> {
     });
   }
 
+  setgameState() async {
+    // var url = 'https://sanskrut-interns.appspot.com/apis/setState';
+
+    String token = await dbInstance.getToken();
+    // var url = 'https://localhost:8080/apis/joinroom';
+    // final headers = {
+    //   'Authorization': 'Bearer $token',
+    //   // HttpHeaders.contentTypeHeader: 'application/json'
+    // };
+    FirebaseDatabase.instance
+        .reference()
+        .child('/rooms/room_' + widget.roomToken.toString())
+        .update({'tempState': true}).then((value) {
+      print('done');
+    });
+
+    // databseReference.ref().update({tempState: 'true'});
+
+    // final data = {'roomid': widget.roomToken};
+    // String body = jsonEncode(data);
+    try {
+      tempStateCheck();
+      print(tempState);
+      if (tempState[4] == true) {
+        print(true);
+      } else {
+        print(false);
+      }
+    } catch (error) {
+      print(error);
+      CircularProgressIndicator();
+    }
+    // var resp = await http.post(url, headers: headers, body: body);
+  }
+
+  tempStateCheck() {
+    var databseReference;
+    databseReference = FirebaseDatabase.instance
+        .reference()
+        .child('/rooms/room_' + widget.roomToken.toString())
+        .onValue
+        .listen((event) {
+      print("in data");
+      print(event.snapshot.value);
+      if (event.snapshot.value['tempState']) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    BoardScreen(roomToken: widget.roomToken)));
+        // navigate to game
+        print("game started");
+      }
+    });
+  }
+
   @override
   void initState() {
+    var databseReference;
     print(databaseMethods.uid);
     // TODO: implement initState
     super.initState();
@@ -46,6 +110,8 @@ class _RoomscreenState extends State<Roomscreen> {
     databseReference.onChildAdded.listen((_) {
       listenplayers(widget.roomToken);
     });
+
+    tempStateCheck();
   }
 
   @override
@@ -177,7 +243,9 @@ class _RoomscreenState extends State<Roomscreen> {
                   ? RaisedButton(
                       color: Colors.brown[700],
                       splashColor: Colors.brown[200],
-                      onPressed: () {},
+                      onPressed: () {
+                        setgameState();
+                      },
 
                       child: Text(
                         'Start Game',
