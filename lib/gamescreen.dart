@@ -56,6 +56,8 @@ class _BoardState extends State<Board> {
 
   getCurrentUser() {
     var currentuser = dbInstance.user;
+
+    print(currentuser.uid);
     //print(currentuser);
   }
 
@@ -63,6 +65,7 @@ class _BoardState extends State<Board> {
   int playerNumber = 1;
 
   List playersin = [];
+  List positionsofplayers = [];
   //final List positions = [];
   List naming = [];
   readPlayers() {
@@ -78,7 +81,11 @@ class _BoardState extends State<Board> {
       print(playersin);
 
       for (var i = 0; i <= playersin.length - 1; i++) {
-        naming.add(playersin[i]['name']);
+        naming.add(playersin[i]['playerUID']);
+      }
+
+      for (var i = 0; i <= playersin.length - 1; i++) {
+        positionsofplayers.add(playersin[i]['position']);
       }
       setState(() {});
       print(naming);
@@ -110,7 +117,16 @@ class _BoardState extends State<Board> {
       print('updated');
       //diceNumber = diceVal;
       print(body);
+      print(naming);
+      liveDice();
     }
+  }
+
+  void showInSnackBar(String value) {
+    Scaffold.of(context).showSnackBar(new SnackBar(
+      content: new Text(value),
+      backgroundColor: Colors.brown[800],
+    ));
   }
 
   playerPosition() {
@@ -162,6 +178,7 @@ class _BoardState extends State<Board> {
         .listen((event) {
       print(event.snapshot.value['dice']);
       diceNumber = event.snapshot.value['dice'];
+      memberChance = event.snapshot.value['memberChance'];
       setState(() {
         print('in live dice');
 
@@ -175,7 +192,7 @@ class _BoardState extends State<Board> {
   void initState() {
     Board();
     readPlayers();
-    //  playerPosition();
+    //playerPosition();
     print(widget.roomToken);
     getCurrentUser();
     // setState(() {});
@@ -244,10 +261,37 @@ class _BoardState extends State<Board> {
                 return Stack(children: [
                   // index == a
                   Container(
-                    height: 20,
-                    alignment: Alignment.bottomCenter,
-                    //   child: Image.asset('assets/images/tok1.png'),
-                  ),
+                      height: 100,
+                      alignment: Alignment.bottomCenter,
+                      child: Center(
+                        child: Column(children: [
+                          index == 5
+                              ? Container(
+                                  height: 10,
+                                  alignment: Alignment.center,
+                                  child: Image.asset('assets/images/tok0.png'))
+                              : SizedBox.shrink(),
+                          index == 5
+                              ? Container(
+                                  height: 10,
+                                  alignment: Alignment.center,
+                                  child: Image.asset('assets/images/tok1.png'))
+                              : SizedBox.shrink(),
+                          index == 3
+                              ? Container(
+                                  height: 10,
+                                  alignment: Alignment.center,
+                                  child: Image.asset('assets/images/tok2.png'))
+                              : SizedBox.shrink(),
+                          index == 3
+                              ? Container(
+                                  height: 10,
+                                  alignment: Alignment.center,
+                                  child: Image.asset('assets/images/tok3.png'))
+                              : SizedBox.shrink()
+                          // ],
+                        ]),
+                      )),
                   // : SizedBox.shrink(),
                   Container(
                     decoration:
@@ -269,8 +313,8 @@ class _BoardState extends State<Board> {
 
           Center(
             child: Text(
-              'chance of ' + diceNumber.toString(),
-              style: TextStyle(color: Colors.white, fontSize: 20.0),
+              'CHANCE of  ' + naming[memberChance - 1].toString(),
+              style: TextStyle(color: Colors.white, fontSize: 13.0),
             ),
           ),
           SizedBox(height: 10),
@@ -294,15 +338,23 @@ class _BoardState extends State<Board> {
                           onPressed: () async {
                             //  index = valuess(index);
                             //    changeDiceFace();
-                            playSound();
-                            diceNumber = await rollDiceChance();
-                            // playerPosition();
-                            // liveDice();
-                            // //  playSound();
-                            // print('======');
+                            String loggedid = dbInstance.uid;
 
-                            setState(() {});
-                            print(diceNumber);
+                            if (naming[memberChance - 1] != loggedid) {
+                              print('not your turn');
+                              getCurrentUser();
+                              showInSnackBar('not your turn');
+                            } else {
+                              playSound();
+                              diceNumber = await rollDiceChance();
+                              // playerPosition();
+                              // liveDice();
+                              // //  playSound();
+                              // print('======');
+
+                              setState(() {});
+                              print(diceNumber);
+                            }
                           },
                           child: Image.asset('assets/images/$diceNumber.png'),
                         ),

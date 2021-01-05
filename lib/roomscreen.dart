@@ -45,54 +45,53 @@ class _RoomscreenState extends State<Roomscreen> {
     // var url = 'https://sanskrut-interns.appspot.com/apis/setState';
 
     String token = await dbInstance.getToken();
-    // var url = 'https://localhost:8080/apis/joinroom';
-    // final headers = {
-    //   'Authorization': 'Bearer $token',
-    //   // HttpHeaders.contentTypeHeader: 'application/json'
-    // };
     FirebaseDatabase.instance
         .reference()
         .child('/rooms/room_' + widget.roomToken.toString())
         .update({'tempState': true}).then((value) {
       print('done');
+      // setState(() {
+      tempStateCheck();
+      // });
     });
 
     // databseReference.ref().update({tempState: 'true'});
 
     // final data = {'roomid': widget.roomToken};
     // String body = jsonEncode(data);
-    try {
-      tempStateCheck();
-      print(tempState);
-      if (tempState[4] == true) {
-        print(true);
-      } else {
-        print(false);
-      }
-    } catch (error) {
-      print(error);
-      CircularProgressIndicator();
-    }
+    // try {
+    //   tempStateCheck();
+    //   if (tempState[4] == true) {
+    //     print(true);
+    //   } else {
+    //     print(false);
+    //   }
+    // } catch (error) {
+    //   print(error);
+    //   CircularProgressIndicator();
+
     // var resp = await http.post(url, headers: headers, body: body);
   }
 
-  tempStateCheck() {
+  tempStateCheck() async {
     var databseReference;
     databseReference = FirebaseDatabase.instance
         .reference()
-        .child('/rooms/room_' + widget.roomToken.toString())
+        .child('/rooms/room_' + widget.roomToken.toString() + '/tempState')
         .onValue
         .listen((event) {
       print("in data");
       print(event.snapshot.value);
-      if (event.snapshot.value['tempState']) {
+      if (event.snapshot.value == false) {
+        // navigate to game
+        print('not started');
+      } else {
+        print("game started");
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) =>
                     BoardScreen(roomToken: widget.roomToken)));
-        // navigate to game
-        print("game started");
       }
     });
   }
@@ -107,11 +106,10 @@ class _RoomscreenState extends State<Roomscreen> {
         .reference()
         .child('/rooms/room_' + widget.roomToken.toString() + '/players');
     listenplayers(widget.roomToken);
+    tempStateCheck();
     databseReference.onChildAdded.listen((_) {
       listenplayers(widget.roomToken);
     });
-
-    tempStateCheck();
   }
 
   @override

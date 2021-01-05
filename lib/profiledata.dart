@@ -90,7 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final DataSnapshot snapshot = await dbs.once();
         dynamic tempstatevalue = snapshot.value;
         print(tempstatevalue['tempState']);
-        if (tempstatevalue['tempState'] = true) {
+        if (tempstatevalue['tempState'] == true) {
           print('already statred');
           return showDialog<void>(
               context: context,
