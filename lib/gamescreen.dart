@@ -56,7 +56,7 @@ class _BoardState extends State<Board> {
 
   getCurrentUser() {
     var currentuser = dbInstance.user;
-    print(currentuser);
+    //print(currentuser);
   }
 
   int diceNumber = 0;
@@ -64,7 +64,7 @@ class _BoardState extends State<Board> {
 
   List playersin = [];
   //final List positions = [];
-
+  List naming = [];
   readPlayers() {
     var rtoken = widget.roomToken;
     print(rtoken);
@@ -76,26 +76,23 @@ class _BoardState extends State<Board> {
       final Map value = snapshot.value;
       playersin = value.values.toList();
       print(playersin);
-      List naming = [];
+
       for (var i = 0; i <= playersin.length - 1; i++) {
         naming.add(playersin[i]['name']);
       }
       setState(() {});
       print(naming);
-      return naming;
-      //var a = snapshot.value;
-      //   print(a);
     });
   }
 
   boardValue(currentPlayerPos, whichPlayer, diceVal) async {
     var url =
-        'https://sanskrut-interns.appspot.com/apis/board/:${widget.roomToken}';
-
+        'https://sanskrut-interns.appspot.com/apis/board/${widget.roomToken}';
+    String token = await dbInstance.getToken();
     // var url = 'https://localhost:8080/apis/joinroom';
     final headers = {
-      'Authorization': 'Bearer ${widget.roomToken}',
-      // HttpHeaders.contentTypeHeader: 'application/json'
+      'Authorization': 'Bearer ${token}',
+      HttpHeaders.contentTypeHeader: 'application/json'
     };
 
     final body = {
@@ -111,6 +108,8 @@ class _BoardState extends State<Board> {
     print(response.statusCode);
     if (response.statusCode == 200) {
       print('updated');
+      //diceNumber = diceVal;
+      print(body);
     }
   }
 
@@ -149,32 +148,37 @@ class _BoardState extends State<Board> {
       }
 
       boardValue(positions[mem - 1], memberChance, diceNumber);
-      //return positions;
+      print('playerposition');
+      print(diceNumber);
+      //return diceNumber;
     });
   }
 
-  // liveDice() {
-  //   FirebaseDatabase.instance
-  //       .reference()
-  //       .child('/rooms/room_' + widget.roomToken.toString())
-  //       .onValue
-  //       .listen((event) {
-  //     print(event.snapshot.value['dice']);
-  //     diceNumber = event.snapshot.value['dice'];
-  //     setState(() {});
-  //   });
-  // }
+  liveDice() {
+    FirebaseDatabase.instance
+        .reference()
+        .child('/rooms/room_' + widget.roomToken.toString())
+        .onValue
+        .listen((event) {
+      print(event.snapshot.value['dice']);
+      diceNumber = event.snapshot.value['dice'];
+      setState(() {
+        print('in live dice');
+
+        print(diceNumber);
+      });
+    });
+    return diceNumber;
+  }
 
   @override
   void initState() {
     Board();
     readPlayers();
-    playerPosition();
+    //  playerPosition();
     print(widget.roomToken);
     getCurrentUser();
-    // setState(() {
-    //   // liveDice();
-    // });
+    // setState(() {});
 
     //print(widget.roomToken + '==================');
   }
@@ -193,27 +197,17 @@ class _BoardState extends State<Board> {
     var rest = jsonDecode(response.body);
     final data = rest["dice_value"];
 
-    setState(() {
-      diceNumber = data;
-    });
-
-    // print(response.statusCode);
     if (response.statusCode == 200) {
       print("body part");
       // print(data);
+      diceNumber = data;
       playerPosition();
+
       return diceNumber;
     } else {
       throw ErrorDescription("error in this");
     }
   }
-
-  // createroom() {
-  //   Map<String, dynamic> roomMap = {
-  //     "users": "name",
-  //     "chatroomId": "roomnumber",
-  //   };
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +269,7 @@ class _BoardState extends State<Board> {
 
           Center(
             child: Text(
-              'Player $playerNumber',
+              'chance of ' + diceNumber.toString(),
               style: TextStyle(color: Colors.white, fontSize: 20.0),
             ),
           ),
@@ -302,10 +296,12 @@ class _BoardState extends State<Board> {
                             //    changeDiceFace();
                             playSound();
                             diceNumber = await rollDiceChance();
-                            playerPosition();
-                            //liveDice();
-                            //  playSound();
-                            print('======');
+                            // playerPosition();
+                            // liveDice();
+                            // //  playSound();
+                            // print('======');
+
+                            setState(() {});
                             print(diceNumber);
                           },
                           child: Image.asset('assets/images/$diceNumber.png'),
