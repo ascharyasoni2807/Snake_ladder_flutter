@@ -20,6 +20,8 @@ class BoardScreen extends StatelessWidget {
       home: SafeArea(
         child: Scaffold(
           body: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/wooden.jpg'),
@@ -63,7 +65,7 @@ class _BoardState extends State<Board> {
 
   int diceNumber = 0;
   int playerNumber = 1;
-
+  List playerUIDS = [];
   List playersin = [];
   List positionsofplayers = [];
   //final List positions = [];
@@ -81,11 +83,15 @@ class _BoardState extends State<Board> {
       print(playersin);
 
       for (var i = 0; i <= playersin.length - 1; i++) {
-        naming.add(playersin[i]['playerUID']);
+        playerUIDS.add(playersin[i]['playerUID']);
       }
 
       for (var i = 0; i <= playersin.length - 1; i++) {
         positionsofplayers.add(playersin[i]['position']);
+      }
+
+      for (var i = 0; i <= playersin.length - 1; i++) {
+        naming.add(playersin[i]['name']);
       }
       setState(() {});
       print(naming);
@@ -119,6 +125,7 @@ class _BoardState extends State<Board> {
       print(body);
       print(naming);
       liveDice();
+      setState(() {});
     }
   }
 
@@ -129,6 +136,8 @@ class _BoardState extends State<Board> {
     ));
   }
 
+  List positions = [];
+  List values = [];
   playerPosition() {
     FirebaseDatabase.instance
         .reference()
@@ -138,14 +147,14 @@ class _BoardState extends State<Board> {
       print('in playerposition');
       print(snapshot.value);
       final Map val = snapshot.value;
-      List values = [];
+
       values = val.values.toList();
       //  print(values[0]['position']);
-      List positions = [];
+
       for (var i = 0; i < values.length; i++) {
         print(values[i]['name']);
         positions.add(values[i]['position']);
-        // print(positions);
+        print(positions);
       }
       print(positions);
       final mem = memberChance;
@@ -166,6 +175,7 @@ class _BoardState extends State<Board> {
       boardValue(positions[mem - 1], memberChance, diceNumber);
       print('playerposition');
       print(diceNumber);
+
       //return diceNumber;
     });
   }
@@ -178,14 +188,12 @@ class _BoardState extends State<Board> {
         .listen((event) {
       print(event.snapshot.value['dice']);
       diceNumber = event.snapshot.value['dice'];
-      memberChance = event.snapshot.value['memberChance'];
-      setState(() {
-        print('in live dice');
 
-        print(diceNumber);
+      setState(() {
+        memberChance = event.snapshot.value['memberChance'];
       });
+      return memberChance;
     });
-    return diceNumber;
   }
 
   @override
@@ -265,30 +273,35 @@ class _BoardState extends State<Board> {
                       alignment: Alignment.bottomCenter,
                       child: Center(
                         child: Column(children: [
-                          index == 5
-                              ? Container(
-                                  height: 10,
-                                  alignment: Alignment.center,
-                                  child: Image.asset('assets/images/tok0.png'))
-                              : SizedBox.shrink(),
-                          index == 5
-                              ? Container(
-                                  height: 10,
-                                  alignment: Alignment.center,
-                                  child: Image.asset('assets/images/tok1.png'))
-                              : SizedBox.shrink(),
-                          index == 3
-                              ? Container(
-                                  height: 10,
-                                  alignment: Alignment.center,
-                                  child: Image.asset('assets/images/tok2.png'))
-                              : SizedBox.shrink(),
-                          index == 3
-                              ? Container(
-                                  height: 10,
-                                  alignment: Alignment.center,
-                                  child: Image.asset('assets/images/tok3.png'))
-                              : SizedBox.shrink()
+                          // index == values[0]['position']
+                          //     // values[0]['position'] != null
+                          //     ? Container(
+                          //         height: 10,
+                          //         alignment: Alignment.center,
+                          //         child: Image.asset('assets/images/tok0.png'))
+                          //     : SizedBox.shrink(),
+                          // //: SizedBox.shrink(),
+                          // index == values[1]['position']
+                          //     ? Container(
+                          //         height: 10,
+                          //         alignment: Alignment.center,
+                          //         child: Image.asset('assets/images/tok1.png'))
+                          //     : SizedBox.shrink()
+                          //: SizedBox.shrink()
+                          // index == values[2]['position'] &&
+                          //         values[2]['position'] != null
+                          //     ? Container(
+                          //         height: 10,
+                          //         alignment: Alignment.center,
+                          //         child: Image.asset('assets/images/tok2.png'))
+                          //     : SizedBox.shrink(),
+                          // index == values[3]['position'] &&
+                          //         values[3]['position'] != null
+                          //     ? Container(
+                          //         height: 10,
+                          //         alignment: Alignment.center,
+                          //         child: Image.asset('assets/images/tok3.png'))
+                          //     : SizedBox.shrink()
                           // ],
                         ]),
                       )),
@@ -296,7 +309,10 @@ class _BoardState extends State<Board> {
                   Container(
                     decoration:
                         BoxDecoration(border: Border.all(color: Colors.black)),
-                    child: Center(child: Text(((index) + 1).toString()))
+                    child: Center(
+                        child: (index == 0 || index == 99)
+                            ? Text('')
+                            : Text((((index) + 1)).toString()))
                     // color: Colors.yellow,
                     ,
                   ),
@@ -313,7 +329,7 @@ class _BoardState extends State<Board> {
 
           Center(
             child: Text(
-              'CHANCE of  ' + naming[memberChance - 1].toString(),
+              'CHANCE of=' + naming[memberChance - 1].toString(),
               style: TextStyle(color: Colors.white, fontSize: 13.0),
             ),
           ),
@@ -340,10 +356,14 @@ class _BoardState extends State<Board> {
                             //    changeDiceFace();
                             String loggedid = dbInstance.uid;
 
-                            if (naming[memberChance - 1] != loggedid) {
+                            if (playerUIDS[memberChance - 1] != loggedid) {
                               print('not your turn');
                               getCurrentUser();
                               showInSnackBar('not your turn');
+                              print(positions);
+                              print(values);
+                              liveDice();
+                              // playerPosition();
                             } else {
                               playSound();
                               diceNumber = await rollDiceChance();
