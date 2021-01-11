@@ -118,8 +118,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      Roomscreen(roomToken: roomtoken.toString())));
+                  builder: (context) => Roomscreen(
+                        roomToken: roomtoken.toString(),
+                      )));
         }
       } catch (error) {
         print(error);

@@ -98,6 +98,21 @@ class _BoardState extends State<Board> {
     });
   }
 
+  player() {
+    FirebaseDatabase.instance
+        .reference()
+        .child('/rooms/room_' + widget.roomToken.toString() + '/players')
+        .onValue
+        .listen((event) {
+      print(event.snapshot.value);
+      print(event.snapshot.value['position']);
+      print('hello');
+      setState(() {
+        //playerPosition();
+      });
+    });
+  }
+
   boardValue(currentPlayerPos, whichPlayer, diceVal) async {
     var url =
         'https://sanskrut-interns.appspot.com/apis/board/${widget.roomToken}';
@@ -121,12 +136,14 @@ class _BoardState extends State<Board> {
     print(response.statusCode);
     if (response.statusCode == 200) {
       print('updated');
+
       //diceNumber = diceVal;
       print(body);
       print(naming);
       liveDice();
-      setState(() {});
+      player();
     }
+    liveDice();
   }
 
   void showInSnackBar(String value) {
@@ -136,29 +153,36 @@ class _BoardState extends State<Board> {
     ));
   }
 
-  List positions = [];
-  List values = [];
+  List positions = [0, 0];
+  List valuesofplayer = [];
   playerPosition() {
     FirebaseDatabase.instance
         .reference()
         .child('/rooms/room_' + widget.roomToken.toString() + '/players')
+        // .onValue
+        // .listen((event) {
         .once()
         .then((DataSnapshot snapshot) {
       print('in playerposition');
       print(snapshot.value);
       final Map val = snapshot.value;
 
-      values = val.values.toList();
+      valuesofplayer = val.values.toList();
+
+      //valuesofplayer = val.values.toList();
+
       //  print(values[0]['position']);
 
-      for (var i = 0; i < values.length; i++) {
-        print(values[i]['name']);
-        positions.add(values[i]['position']);
-        print(positions);
-      }
+      // for (var i = 0; i < valuesofplayer.length; i++) {
+      //   print(valuesofplayer[i]['name']);
+      //   // positions.add(values[i]['position']);
+      //   positions.add(valuesofplayer[i]['position']);
+      //   print(positions);
+      // }
       print(positions);
       final mem = memberChance;
       positions[mem - 1] = positions[mem - 1] + diceNumber;
+      print('positionsssssssssssssssssssssssssssssssssssssssss');
       print(positions);
       if (positions[mem - 1] == 100) {
         print('winner mem cahnce');
@@ -172,9 +196,9 @@ class _BoardState extends State<Board> {
             positions[mem - 1].toString());
       }
 
-      boardValue(positions[mem - 1], memberChance, diceNumber);
       print('playerposition');
-      print(diceNumber);
+
+      boardValue(positions[mem - 1], memberChance, diceNumber);
 
       //return diceNumber;
     });
@@ -191,9 +215,13 @@ class _BoardState extends State<Board> {
 
       setState(() {
         memberChance = event.snapshot.value['memberChance'];
+        // playerPosition();
       });
+
+      //playerPosition();
       return memberChance;
     });
+    // playerPosition();
   }
 
   @override
@@ -273,35 +301,46 @@ class _BoardState extends State<Board> {
                       alignment: Alignment.bottomCenter,
                       child: Center(
                         child: Column(children: [
-                          // index == values[0]['position']
-                          //     // values[0]['position'] != null
-                          //     ? Container(
-                          //         height: 10,
-                          //         alignment: Alignment.center,
-                          //         child: Image.asset('assets/images/tok0.png'))
-                          //     : SizedBox.shrink(),
-                          // //: SizedBox.shrink(),
-                          // index == values[1]['position']
-                          //     ? Container(
-                          //         height: 10,
-                          //         alignment: Alignment.center,
-                          //         child: Image.asset('assets/images/tok1.png'))
-                          //     : SizedBox.shrink()
-                          //: SizedBox.shrink()
-                          // index == values[2]['position'] &&
-                          //         values[2]['position'] != null
-                          //     ? Container(
-                          //         height: 10,
-                          //         alignment: Alignment.center,
-                          //         child: Image.asset('assets/images/tok2.png'))
-                          //     : SizedBox.shrink(),
-                          // index == values[3]['position'] &&
-                          //         values[3]['position'] != null
-                          //     ? Container(
-                          //         height: 10,
-                          //         alignment: Alignment.center,
-                          //         child: Image.asset('assets/images/tok3.png'))
-                          //     : SizedBox.shrink()
+                          valuesofplayer.length > 0
+                              ? index == valuesofplayer[0]['position']
+                                  // valuesofplayer[0]['position'] != null
+                                  ? Container(
+                                      height: 11,
+                                      alignment: Alignment.center,
+                                      child:
+                                          Image.asset('assets/images/tok0.png'))
+                                  : SizedBox.shrink()
+                              : SizedBox.shrink(),
+                          valuesofplayer.length > 1
+                              ? index == valuesofplayer[1]['position']
+                                  ? Container(
+                                      height: 11,
+                                      alignment: Alignment.center,
+                                      child:
+                                          Image.asset('assets/images/tok1.png'))
+                                  : SizedBox.shrink()
+                              : SizedBox.shrink(),
+                          valuesofplayer.length > 2
+                              ? index == valuesofplayer[2]['position'] &&
+                                      valuesofplayer[2]['position'] != null
+                                  //  values[2]['position'] != null
+                                  ? Container(
+                                      height: 10,
+                                      alignment: Alignment.center,
+                                      child:
+                                          Image.asset('assets/images/tok2.png'))
+                                  : SizedBox.shrink()
+                              : SizedBox.shrink(),
+                          valuesofplayer.length > 3
+                              ? index == valuesofplayer[3]['position'] &&
+                                      valuesofplayer[3]['position'] != null
+                                  ? Container(
+                                      height: 10,
+                                      alignment: Alignment.center,
+                                      child:
+                                          Image.asset('assets/images/tok3.png'))
+                                  : SizedBox.shrink()
+                              : SizedBox.shrink()
                           // ],
                         ]),
                       )),
@@ -329,8 +368,11 @@ class _BoardState extends State<Board> {
 
           Center(
             child: Text(
-              'CHANCE of=' + naming[memberChance - 1].toString(),
-              style: TextStyle(color: Colors.white, fontSize: 13.0),
+              'CHANCE of  :  ' + naming[memberChance - 1].toString(),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(height: 10),
@@ -361,13 +403,14 @@ class _BoardState extends State<Board> {
                               getCurrentUser();
                               showInSnackBar('not your turn');
                               print(positions);
-                              print(values);
+                              print(valuesofplayer);
                               liveDice();
                               // playerPosition();
                             } else {
                               playSound();
+                              //playerPosition();
                               diceNumber = await rollDiceChance();
-                              // playerPosition();
+
                               // liveDice();
                               // //  playSound();
                               // print('======');
