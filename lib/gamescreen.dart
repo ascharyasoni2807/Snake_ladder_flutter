@@ -155,7 +155,7 @@ class _BoardState extends State<Board> {
 
   List positions = [0, 0];
   List valuesofplayer = [];
-  playerPosition() {
+  playerPosition() async {
     FirebaseDatabase.instance
         .reference()
         .child('/rooms/room_' + widget.roomToken.toString() + '/players')
@@ -166,6 +166,8 @@ class _BoardState extends State<Board> {
       print('in playerposition');
       print(snapshot.value);
       final Map val = snapshot.value;
+      // print(event.snapshot.value);
+      // final Map val = event.snapshot.value;
 
       valuesofplayer = val.values.toList();
 
@@ -197,7 +199,7 @@ class _BoardState extends State<Board> {
       }
 
       print('playerposition');
-
+      setState(() {});
       boardValue(positions[mem - 1], memberChance, diceNumber);
 
       //return diceNumber;
@@ -212,7 +214,10 @@ class _BoardState extends State<Board> {
         .listen((event) {
       print(event.snapshot.value['dice']);
       diceNumber = event.snapshot.value['dice'];
-
+      print(event.snapshot.value);
+      // final Map k = Map();
+      // k.values.toList();
+      valuesofplayer = event.snapshot.value['players'].values.toList();
       setState(() {
         memberChance = event.snapshot.value['memberChance'];
         // playerPosition();
@@ -221,16 +226,18 @@ class _BoardState extends State<Board> {
       //playerPosition();
       return memberChance;
     });
-    // playerPosition();
+    //playerPosition();
   }
 
   @override
   void initState() {
     Board();
+    getCurrentUser();
     readPlayers();
     //playerPosition();
     print(widget.roomToken);
-    getCurrentUser();
+    liveDice();
+
     // setState(() {});
 
     //print(widget.roomToken + '==================');
@@ -255,7 +262,6 @@ class _BoardState extends State<Board> {
       // print(data);
       diceNumber = data;
       playerPosition();
-
       return diceNumber;
     } else {
       throw ErrorDescription("error in this");
@@ -275,7 +281,7 @@ class _BoardState extends State<Board> {
             decoration: BoxDecoration(
               color: Colors.white,
               image: DecorationImage(
-                  image: AssetImage('assets/images/board3.png'),
+                  image: AssetImage('assets/images/board4.png'),
                   fit: BoxFit.fill),
             ),
             // decoration: BoxDecoration(
@@ -349,9 +355,13 @@ class _BoardState extends State<Board> {
                     decoration:
                         BoxDecoration(border: Border.all(color: Colors.black)),
                     child: Center(
-                        child: (index == 0 || index == 99)
-                            ? Text('')
-                            : Text((((index) + 1)).toString()))
+                        child: ((10 <= index && index <= 19) ||
+                                (30 <= index && index <= 39) ||
+                                (50 <= index && index <= 59) ||
+                                (70 <= index && index <= 79) ||
+                                (90 <= index && index <= 99))
+                            ? Text((index + 1).toString())
+                            : Text((index + 1).toString()))
                     // color: Colors.yellow,
                     ,
                   ),
@@ -419,7 +429,13 @@ class _BoardState extends State<Board> {
                               print(diceNumber);
                             }
                           },
-                          child: Image.asset('assets/images/$diceNumber.png'),
+                          child: Opacity(
+                              opacity:
+                                  playerUIDS[memberChance - 1] != dbInstance.uid
+                                      ? 0.5
+                                      : 1.0,
+                              child:
+                                  Image.asset('assets/images/$diceNumber.png')),
                         ),
                       ),
                     ],
