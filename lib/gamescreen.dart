@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:gamesnl/winnerpopup.dart';
 import 'package:gamesnl/signin.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class BoardScreen extends StatelessWidget {
   final roomToken;
@@ -166,21 +167,9 @@ class _BoardState extends State<Board> {
       print('in playerposition');
       print(snapshot.value);
       final Map val = snapshot.value;
-      // print(event.snapshot.value);
-      // final Map val = event.snapshot.value;
 
       valuesofplayer = val.values.toList();
 
-      //valuesofplayer = val.values.toList();
-
-      //  print(values[0]['position']);
-
-      // for (var i = 0; i < valuesofplayer.length; i++) {
-      //   print(valuesofplayer[i]['name']);
-      //   // positions.add(values[i]['position']);
-      //   positions.add(valuesofplayer[i]['position']);
-      //   print(positions);
-      // }
       print(positions);
       final mem = memberChance;
       positions[mem - 1] = positions[mem - 1] + diceNumber;
@@ -243,6 +232,37 @@ class _BoardState extends State<Board> {
     //print(widget.roomToken + '==================');
   }
 
+  winpopup(name) {
+    setState(() {
+      Alert(
+          style: AlertStyle(
+              backgroundColor: Colors.brown[800],
+              alertBorder: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(0.0),
+                side: BorderSide(
+                  color: Colors.white,
+                ),
+              ),
+              titleStyle: TextStyle(color: Colors.white)),
+          context: context,
+          title: 'WINNER IS',
+          content: Column(
+            children: <Widget>[],
+          ),
+          buttons: [
+            DialogButton(
+              width: 180,
+              color: Colors.brown[400],
+              onPressed: () async {},
+              child: Text(
+                name,
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            )
+          ]).show();
+    });
+  }
+
   Future<int> rollDiceChance() async {
     var url = 'https://sanskrut-interns.appspot.com/apis/board';
     String token = await dbInstance.getToken();
@@ -281,7 +301,7 @@ class _BoardState extends State<Board> {
             decoration: BoxDecoration(
               color: Colors.white,
               image: DecorationImage(
-                  image: AssetImage('assets/images/board4.png'),
+                  image: AssetImage('assets/images/board3.png'),
                   fit: BoxFit.fill),
             ),
             // decoration: BoxDecoration(
@@ -308,44 +328,83 @@ class _BoardState extends State<Board> {
                       child: Center(
                         child: Column(children: [
                           valuesofplayer.length > 0
-                              ? index == valuesofplayer[0]['position']
+                              ? index == valuesofplayer[0]['position'] &&
+                                      valuesofplayer[0]['position'] != null &&
+                                      valuesofplayer[0]['position'] != 99
                                   // valuesofplayer[0]['position'] != null
                                   ? Container(
                                       height: 11,
                                       alignment: Alignment.center,
                                       child:
                                           Image.asset('assets/images/tok0.png'))
-                                  : SizedBox.shrink()
+                                  : index == valuesofplayer[0]['position'] &&
+                                          valuesofplayer[0]['position'] == 99
+                                      ? Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Winnerpopup(
+                                                    passname: valuesofplayer[0]
+                                                        ['name'],
+                                                  )))
+                                      : SizedBox.shrink()
                               : SizedBox.shrink(),
                           valuesofplayer.length > 1
-                              ? index == valuesofplayer[1]['position']
+                              ? index == valuesofplayer[1]['position'] &&
+                                      valuesofplayer[1]['position'] != null &&
+                                      valuesofplayer[1]['position'] != 99
                                   ? Container(
                                       height: 11,
                                       alignment: Alignment.center,
                                       child:
                                           Image.asset('assets/images/tok1.png'))
-                                  : SizedBox.shrink()
+                                  : index == valuesofplayer[1]['position'] &&
+                                          valuesofplayer[1]['position'] == 99
+                                      ? Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Winnerpopup(
+                                                  passname: valuesofplayer[1]
+                                                      ['name'])))
+                                      : SizedBox.shrink()
                               : SizedBox.shrink(),
                           valuesofplayer.length > 2
                               ? index == valuesofplayer[2]['position'] &&
-                                      valuesofplayer[2]['position'] != null
+                                      valuesofplayer[2]['position'] != null &&
+                                      valuesofplayer[2]['position'] != 99
                                   //  values[2]['position'] != null
                                   ? Container(
                                       height: 10,
                                       alignment: Alignment.center,
                                       child:
                                           Image.asset('assets/images/tok2.png'))
-                                  : SizedBox.shrink()
+                                  : index == valuesofplayer[2]['position'] &&
+                                          valuesofplayer[2]['position'] == 99
+                                      ? Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Winnerpopup(
+                                                  passname: valuesofplayer[2]
+                                                      ['name'])))
+                                      : SizedBox.shrink()
                               : SizedBox.shrink(),
                           valuesofplayer.length > 3
                               ? index == valuesofplayer[3]['position'] &&
-                                      valuesofplayer[3]['position'] != null
+                                      valuesofplayer[3]['position'] != null &&
+                                      valuesofplayer[3]['position'] != 99
                                   ? Container(
                                       height: 10,
                                       alignment: Alignment.center,
                                       child:
                                           Image.asset('assets/images/tok3.png'))
-                                  : SizedBox.shrink()
+                                  : index == valuesofplayer[3]['position'] &&
+                                          valuesofplayer[3]['position'] == 99
+                                      ? Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Winnerpopup(
+                                                  passname: valuesofplayer[3]
+                                                      ['name'])))
+                                      : SizedBox.shrink()
                               : SizedBox.shrink()
                           // ],
                         ]),
@@ -406,6 +465,7 @@ class _BoardState extends State<Board> {
                           onPressed: () async {
                             //  index = valuess(index);
                             //    changeDiceFace();
+                            // winpopup(valuesofplayer[0]['name']);
                             String loggedid = dbInstance.uid;
 
                             if (playerUIDS[memberChance - 1] != loggedid) {
