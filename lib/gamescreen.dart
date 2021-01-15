@@ -134,7 +134,7 @@ class _BoardState extends State<Board> {
     String token = await dbInstance.getToken();
     // var url = 'https://localhost:8080/apis/joinroom';
     final headers = {
-      'Authorization': 'Bearer ${token}',
+      'Authorization': 'Bearer $token',
       HttpHeaders.contentTypeHeader: 'application/json'
     };
 
@@ -477,31 +477,33 @@ class _BoardState extends State<Board> {
                           //height: 40,
                           //minWidth: 20,
                           onPressed: () async {
-                            //  index = valuess(index);
-                            //    changeDiceFace();
-                            // winpopup(valuesofplayer[0]['name']);
-                            String loggedid = dbInstance.uid;
+                            // //  index = valuess(index);
+                            // //    changeDiceFace();
+                            // // winpopup(valuesofplayer[0]['name']);
+                            // String loggedid = dbInstance.uid;
 
-                            if (playerUIDS[memberChance - 1] != loggedid) {
-                              print('not your turn');
-                              getCurrentUser();
-                              showInSnackBar('not your turn');
-                              print(positions);
-                              print(valuesofplayer);
-                              liveDice();
-                              // playerPosition();
-                            } else {
-                              playSound();
-                              //playerPosition();
-                              diceNumber = await rollDiceChance();
+                            // if (playerUIDS[memberChance - 1] != loggedid) {
+                            //   print('not your turn');
+                            //   getCurrentUser();
+                            //   showInSnackBar('not your turn');
+                            //   print(positions);
+                            //   print(valuesofplayer);
+                            //   liveDice();
+                            //   // playerPosition();
+                            // } else {
+                            //   playSound();
+                            //   //playerPosition();
+                            //   diceNumber = await rollDiceChance();
 
-                              // liveDice();
-                              // //  playSound();
-                              // print('======');
+                            //   // liveDice();
+                            //   // //  playSound();
+                            //   // print('======');
 
-                              setState(() {});
-                              print(diceNumber);
-                            }
+                            //   setState(() {});
+                            //   print(diceNumber);
+                            // }
+                            var a = boardToIndex(10);
+                            print(a);
                           },
                           child: Opacity(
                               opacity:
