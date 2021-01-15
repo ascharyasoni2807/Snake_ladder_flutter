@@ -57,6 +57,20 @@ class _BoardState extends State<Board> {
     });
   }
 
+  String indexToBoard(int actualIndex) {
+    if ((actualIndex ~/ 10) % 2 == 0) {
+      return actualIndex.toString();
+    } else {
+      if (actualIndex % 10 >= 0 && actualIndex % 10 <= 4) {
+        actualIndex = actualIndex + (9 - ((actualIndex % 10) * 2));
+      } else {
+        actualIndex = ((actualIndex ~/ 10) * 10) + (9 - ((actualIndex % 10)));
+      }
+
+      return actualIndex.toString();
+    }
+  }
+
   int boardToIndex(int boardIndex) {
     if ((boardIndex ~/ 10) % 2 == 0) {
       return boardIndex;
