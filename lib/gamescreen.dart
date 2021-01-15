@@ -57,6 +57,20 @@ class _BoardState extends State<Board> {
     });
   }
 
+  int boardToIndex(int boardIndex) {
+    if ((boardIndex ~/ 10) % 2 == 0) {
+      return boardIndex;
+    } else {
+      if (boardIndex % 10 >= 0 && boardIndex % 10 <= 4) {
+        boardIndex = boardIndex + (9 - ((boardIndex % 10) * 2));
+        return boardIndex;
+      } else {
+        boardIndex = ((boardIndex ~/ 10) * 10) + (9 - ((boardIndex % 10)));
+        return boardIndex;
+      }
+    }
+  }
+
   getCurrentUser() {
     var currentuser = dbInstance.user;
 
