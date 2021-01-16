@@ -212,29 +212,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Column(
                     children: [
-                      // Row(
-                      //   children: [
-                      //     Flexible(
-                      //       child: Text(
-                      //         'TOTAL GAMEPLAYS :',
-                      //         style: fontdesign,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      // SizedBox(
-                      //   height: 50,
-                      // ),
-                      // Row(
-                      //   children: [
-                      //     Flexible(
-                      //       child: Text(
-                      //         'TOTAL WINS :',
-                      //         style: fontdesign,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              'TOTAL GAMEPLAYS :',
+                              style: fontdesign,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              'TOTAL WINS :',
+                              style: fontdesign,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),

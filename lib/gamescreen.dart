@@ -59,6 +59,7 @@ class _BoardState extends State<Board> {
 
   String indexToBoard(int actualIndex) {
     if ((actualIndex ~/ 10) % 2 == 0) {
+      actualIndex += 1;
       return actualIndex.toString();
     } else {
       if (actualIndex % 10 >= 0 && actualIndex % 10 <= 4) {
@@ -66,20 +67,24 @@ class _BoardState extends State<Board> {
       } else {
         actualIndex = ((actualIndex ~/ 10) * 10) + (9 - ((actualIndex % 10)));
       }
-
+      actualIndex += 1;
       return actualIndex.toString();
     }
   }
 
   int boardToIndex(int boardIndex) {
+    boardIndex -= 1;
     if ((boardIndex ~/ 10) % 2 == 0) {
+      // boardIndex += 1;
       return boardIndex;
     } else {
       if (boardIndex % 10 >= 0 && boardIndex % 10 <= 4) {
         boardIndex = boardIndex + (9 - ((boardIndex % 10) * 2));
+        // boardIndex += 1;
         return boardIndex;
       } else {
         boardIndex = ((boardIndex ~/ 10) * 10) + (9 - ((boardIndex % 10)));
+        // boardIndex += 1;
         return boardIndex;
       }
     }
@@ -151,7 +156,8 @@ class _BoardState extends State<Board> {
       'Authorization': 'Bearer $token',
       HttpHeaders.contentTypeHeader: 'application/json'
     };
-
+    // currentPlayerPos = boardToIndex(currentPlayerPos);
+    print(currentPlayerPos);
     final body = {
       'memberChance': whichPlayer,
       'position': currentPlayerPos,
@@ -203,16 +209,18 @@ class _BoardState extends State<Board> {
       positions[mem - 1] = positions[mem - 1] + diceNumber;
       print('positionsssssssssssssssssssssssssssssssssssssssss');
       print(positions);
-      if (positions[mem - 1] == 100) {
+      if (positions[mem - 1] == 99) {
         print('winner mem cahnce');
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    Winnerpopup(passname: valuesofplayer[mem - 1]['name'])));
         // winner();
-      } else if (positions[mem - 1] > 100) {
-        positions[mem - 1] = positions[mem - 1] + diceNumber;
-        print(playersin[mem - 1] + ' new position is =' + positions[mem - 1]);
+      } else if (positions[mem - 1] > 99) {
+        positions[mem - 1] = positions[mem - 1] - diceNumber;
       } else {
-        print(playersin[mem - 1].toString() +
-            ' new position is =' +
-            positions[mem - 1].toString());
+        print(positions[mem - 1]);
       }
 
       print('playerposition');
@@ -356,17 +364,27 @@ class _BoardState extends State<Board> {
                       child: Center(
                         child: Column(children: [
                           valuesofplayer.length > 0
-                              ? index == valuesofplayer[0]['position'] &&
-                                      valuesofplayer[0]['position'] != null &&
-                                      valuesofplayer[0]['position'] != 99
+                              ? index ==
+                                          boardToIndex(
+                                              valuesofplayer[0]['position']) &&
+                                      boardToIndex(
+                                              valuesofplayer[0]['position']) !=
+                                          null &&
+                                      boardToIndex(
+                                              valuesofplayer[0]['position']) !=
+                                          100
                                   // valuesofplayer[0]['position'] != null
                                   ? Container(
                                       height: 11,
                                       alignment: Alignment.center,
                                       child:
                                           Image.asset('assets/images/tok0.png'))
-                                  : index == valuesofplayer[0]['position'] &&
-                                          valuesofplayer[0]['position'] == 99
+                                  : index ==
+                                              boardToIndex(valuesofplayer[0]
+                                                  ['position']) &&
+                                          boardToIndex(valuesofplayer[0]
+                                                  ['position']) ==
+                                              boardToIndex(99)
                                       ? Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
@@ -377,16 +395,24 @@ class _BoardState extends State<Board> {
                                       : SizedBox.shrink()
                               : SizedBox.shrink(),
                           valuesofplayer.length > 1
-                              ? index == valuesofplayer[1]['position'] &&
-                                      valuesofplayer[1]['position'] != null &&
-                                      valuesofplayer[1]['position'] != 99
+                              ? index == boardToIndex(valuesofplayer[1]['position']) &&
+                                      boardToIndex(
+                                              valuesofplayer[1]['position']) !=
+                                          null &&
+                                      boardToIndex(
+                                              valuesofplayer[1]['position']) !=
+                                          100
                                   ? Container(
                                       height: 11,
                                       alignment: Alignment.center,
                                       child:
                                           Image.asset('assets/images/tok1.png'))
-                                  : index == valuesofplayer[1]['position'] &&
-                                          valuesofplayer[1]['position'] == 99
+                                  : index ==
+                                              boardToIndex(valuesofplayer[1]
+                                                  ['position']) &&
+                                          boardToIndex(valuesofplayer[1]
+                                                  ['position']) ==
+                                              boardToIndex(99)
                                       ? Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
@@ -396,17 +422,25 @@ class _BoardState extends State<Board> {
                                       : SizedBox.shrink()
                               : SizedBox.shrink(),
                           valuesofplayer.length > 2
-                              ? index == valuesofplayer[2]['position'] &&
-                                      valuesofplayer[2]['position'] != null &&
-                                      valuesofplayer[2]['position'] != 99
+                              ? index == boardToIndex(valuesofplayer[2]['position']) &&
+                                      boardToIndex(
+                                              valuesofplayer[2]['position']) !=
+                                          null &&
+                                      boardToIndex(
+                                              valuesofplayer[2]['position']) !=
+                                          100
                                   //  values[2]['position'] != null
                                   ? Container(
                                       height: 10,
                                       alignment: Alignment.center,
                                       child:
                                           Image.asset('assets/images/tok2.png'))
-                                  : index == valuesofplayer[2]['position'] &&
-                                          valuesofplayer[2]['position'] == 99
+                                  : index ==
+                                              boardToIndex(valuesofplayer[2]
+                                                  ['position']) &&
+                                          boardToIndex(valuesofplayer[2]
+                                                  ['position']) ==
+                                              100
                                       ? Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
@@ -416,16 +450,24 @@ class _BoardState extends State<Board> {
                                       : SizedBox.shrink()
                               : SizedBox.shrink(),
                           valuesofplayer.length > 3
-                              ? index == valuesofplayer[3]['position'] &&
-                                      valuesofplayer[3]['position'] != null &&
-                                      valuesofplayer[3]['position'] != 99
+                              ? index == boardToIndex(valuesofplayer[3]['position']) &&
+                                      boardToIndex(
+                                              valuesofplayer[3]['position']) !=
+                                          null &&
+                                      boardToIndex(
+                                              valuesofplayer[3]['position']) !=
+                                          100
                                   ? Container(
                                       height: 10,
                                       alignment: Alignment.center,
                                       child:
                                           Image.asset('assets/images/tok3.png'))
-                                  : index == valuesofplayer[3]['position'] &&
-                                          valuesofplayer[3]['position'] == 99
+                                  : index ==
+                                              boardToIndex(valuesofplayer[3]
+                                                  ['position']) &&
+                                          boardToIndex(valuesofplayer[3]
+                                                  ['position']) ==
+                                              100
                                       ? Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
@@ -439,19 +481,19 @@ class _BoardState extends State<Board> {
                       )),
                   // : SizedBox.shrink(),
                   Container(
-                    decoration:
-                        BoxDecoration(border: Border.all(color: Colors.black)),
-                    child: Center(
-                        child: ((10 <= index && index <= 19) ||
-                                (30 <= index && index <= 39) ||
-                                (50 <= index && index <= 59) ||
-                                (70 <= index && index <= 79) ||
-                                (90 <= index && index <= 99))
-                            ? Text((index + 1).toString())
-                            : Text((index + 1).toString()))
-                    // color: Colors.yellow,
-                    ,
-                  ),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black)),
+                      child: Center(
+                          // child: ((10 <= index && index <= 19) ||
+                          //         (30 <= index && index <= 39) ||
+                          //         (50 <= index && index <= 59) ||
+                          //         (70 <= index && index <= 79) ||
+                          //         (90 <= index && index <= 99))
+                          //     ? Text(((indexToBoard(index) + 1)).toString())
+                          child: Text(indexToBoard(index)))
+                      // color: Colors.yellow,
+
+                      )
                 ]);
               },
             ),
@@ -491,32 +533,32 @@ class _BoardState extends State<Board> {
                           //height: 40,
                           //minWidth: 20,
                           onPressed: () async {
-                            // //  index = valuess(index);
-                            // //    changeDiceFace();
-                            // // winpopup(valuesofplayer[0]['name']);
-                            // String loggedid = dbInstance.uid;
+                            //  index = valuess(index);
+                            //    changeDiceFace();
+                            // winpopup(valuesofplayer[0]['name']);
+                            String loggedid = dbInstance.uid;
 
-                            // if (playerUIDS[memberChance - 1] != loggedid) {
-                            //   print('not your turn');
-                            //   getCurrentUser();
-                            //   showInSnackBar('not your turn');
-                            //   print(positions);
-                            //   print(valuesofplayer);
-                            //   liveDice();
-                            //   // playerPosition();
-                            // } else {
-                            //   playSound();
-                            //   //playerPosition();
-                            //   diceNumber = await rollDiceChance();
+                            if (playerUIDS[memberChance - 1] != loggedid) {
+                              print('not your turn');
+                              getCurrentUser();
+                              showInSnackBar('not your turn');
+                              print(positions);
+                              print(valuesofplayer);
+                              liveDice();
+                              // playerPosition();
+                            } else {
+                              playSound();
+                              //playerPosition();
+                              diceNumber = await rollDiceChance();
 
-                            //   // liveDice();
-                            //   // //  playSound();
-                            //   // print('======');
+                              // liveDice();
+                              // //  playSound();
+                              // print('======');
 
-                            //   setState(() {});
-                            //   print(diceNumber);
-                            // }
-                            var a = boardToIndex(10);
+                              setState(() {});
+                              print(diceNumber);
+                            }
+                            var a = indexToBoard(10);
                             print(a);
                           },
                           child: Opacity(
