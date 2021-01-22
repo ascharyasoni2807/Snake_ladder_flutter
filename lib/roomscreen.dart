@@ -39,6 +39,7 @@ class _RoomscreenState extends State<Roomscreen> {
         players = value.values.toList();
       });
     });
+    setState(() {});
   }
 
   setgameState() async {
@@ -51,26 +52,9 @@ class _RoomscreenState extends State<Roomscreen> {
         .update({'tempState': true}).then((value) {
       print('done');
       // setState(() {
-      tempStateCheck();
+      // tempStateCheck();
       // });
     });
-
-    // databseReference.ref().update({tempState: 'true'});
-
-    // final data = {'roomid': widget.roomToken};
-    // String body = jsonEncode(data);
-    // try {
-    //   tempStateCheck();
-    //   if (tempState[4] == true) {
-    //     print(true);
-    //   } else {
-    //     print(false);
-    //   }
-    // } catch (error) {
-    //   print(error);
-    //   CircularProgressIndicator();
-
-    // var resp = await http.post(url, headers: headers, body: body);
   }
 
   tempStateCheck() async {
@@ -80,14 +64,14 @@ class _RoomscreenState extends State<Roomscreen> {
         .child('/rooms/room_' + widget.roomToken.toString() + '/tempState')
         .onValue
         .listen((event) {
-      print("in data");
+      //  print("in data");
       print(event.snapshot.value);
       if (event.snapshot.value == false) {
         // navigate to game
         print('not started');
       } else {
         print("game started");
-        Navigator.pushReplacement(
+        Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
@@ -232,27 +216,37 @@ class _RoomscreenState extends State<Roomscreen> {
                         },
                         itemCount: players.length,
                       )
-                    : CircularProgressIndicator(),
+                    : Container(
+                        height: 15,
+                        width: 15,
+                        child: CircularProgressIndicator()),
               ),
               SizedBox(
                 height: 30,
               ),
               players.length > 0 && dbInstance.uid == players[0]['playerUID']
-                  ? RaisedButton(
-                      color: Colors.brown[700],
-                      splashColor: Colors.brown[200],
-                      onPressed: () {
-                        setgameState();
-                      },
+                  ? Opacity(
+                      opacity: players.length > 1 ? 1 : 0.5,
+                      child: RaisedButton(
+                        color: Colors.brown[700],
+                        splashColor: Colors.brown[200],
+                        onPressed: () {
+                          setState(() {
+                            players.length <= 1
+                                ? print('not starting')
+                                : setgameState();
+                          });
+                        },
 
-                      child: Text(
-                        'Start Game',
-                        style: GoogleFonts.roboto(
-                            textStyle:
-                                TextStyle(fontSize: 13, color: Colors.white)),
+                        child: Text(
+                          'Start Game',
+                          style: GoogleFonts.roboto(
+                              textStyle:
+                                  TextStyle(fontSize: 13, color: Colors.white)),
+                        ),
+
+                        // child:
                       ),
-
-                      // child:
                     )
                   : SizedBox.shrink()
             ],

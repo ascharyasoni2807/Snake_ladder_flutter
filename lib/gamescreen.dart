@@ -141,9 +141,9 @@ class _BoardState extends State<Board> {
       print(event.snapshot.value);
       print(event.snapshot.value['position']);
       print('hello');
-      setState(() {
-        //playerPosition();
-      });
+      // setState(() {
+      //   //playerPosition();
+      // });
     });
   }
 
@@ -175,10 +175,10 @@ class _BoardState extends State<Board> {
       //diceNumber = diceVal;
       print(body);
       print(naming);
-      liveDice();
-      player();
+      // liveDice();
+      //  player();
     }
-    liveDice();
+    //  liveDice();
   }
 
   void showInSnackBar(String value) {
@@ -206,10 +206,11 @@ class _BoardState extends State<Board> {
 
       print(positions);
       final mem = memberChance;
-      positions[mem - 1] = positions[mem - 1] + diceNumber;
+      valuesofplayer[mem - 1]['position'] =
+          valuesofplayer[mem - 1]['position'] + diceNumber;
       print('positionsssssssssssssssssssssssssssssssssssssssss');
       print(positions);
-      if (positions[mem - 1] == 99) {
+      if (valuesofplayer[mem - 1]['position'] == boardToIndex(100)) {
         print('winner mem cahnce');
         Navigator.pushReplacement(
             context,
@@ -218,14 +219,15 @@ class _BoardState extends State<Board> {
                     Winnerpopup(passname: valuesofplayer[mem - 1]['name'])));
         // winner();
       } else if (positions[mem - 1] > 99) {
-        positions[mem - 1] = positions[mem - 1] - diceNumber;
+        valuesofplayer[mem - 1]['position'] =
+            valuesofplayer[mem - 1]['position'] - diceNumber;
       } else {
-        print(positions[mem - 1]);
+        print(valuesofplayer[mem - 1]['position']);
       }
 
       print('playerposition');
-      setState(() {});
-      boardValue(positions[mem - 1], memberChance, diceNumber);
+
+      boardValue(valuesofplayer[mem - 1]['position'], memberChance, diceNumber);
 
       //return diceNumber;
     });
@@ -240,17 +242,29 @@ class _BoardState extends State<Board> {
       print(event.snapshot.value['dice']);
       diceNumber = event.snapshot.value['dice'];
       print(event.snapshot.value);
+
       // final Map k = Map();
       // k.values.toList();
+
       valuesofplayer = event.snapshot.value['players'].values.toList();
+
+      if (valuesofplayer[memberChance - 1]['position'] == boardToIndex(100)) {
+        print('winner mem cahnce');
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Winnerpopup(
+                    passname: valuesofplayer[memberChance - 1]['name'])));
+        // winner();
+      }
       setState(() {
         memberChance = event.snapshot.value['memberChance'];
-        // playerPosition();
       });
 
-      //playerPosition();
+      //    playerPosition();
       return memberChance;
     });
+
     //playerPosition();
   }
 
@@ -329,11 +343,15 @@ class _BoardState extends State<Board> {
     return SafeArea(
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          SizedBox(
+            height: 10,
+          ),
           Container(
             //margin: EdgeInsets.only(top: 5),
-            height: 410,
+            height: 412,
+            width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: Colors.white,
               image: DecorationImage(
@@ -346,8 +364,11 @@ class _BoardState extends State<Board> {
             //         fit: BoxFit.fitHeight)),
             //  color: Colors.blue,
             child: GridView.builder(
+              primary: true,
+              physics: NeverScrollableScrollPhysics(),
               itemCount: 100,
               reverse: true,
+              shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 10,
                 //  childAspectRatio: 1.1,
@@ -542,8 +563,8 @@ class _BoardState extends State<Board> {
                               print('not your turn');
                               getCurrentUser();
                               showInSnackBar('not your turn');
-                              print(positions);
-                              print(valuesofplayer);
+                              // print(positions);
+                              // print(valuesofplayer);
                               liveDice();
                               // playerPosition();
                             } else {
@@ -555,7 +576,7 @@ class _BoardState extends State<Board> {
                               // //  playSound();
                               // print('======');
 
-                              setState(() {});
+                              // setState(() {});
                               print(diceNumber);
                             }
                             var a = indexToBoard(10);

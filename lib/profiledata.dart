@@ -53,6 +53,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  var gameplays;
+  var win;
+
+  getGameData() async {
+    final db =
+        FirebaseDatabase.instance.reference().child('/Users/' + widget.uid);
+    final DataSnapshot snapshot = await db.once();
+    dynamic a = snapshot.value;
+    gameplays = a['gameplay'];
+
+    win = a['wins'];
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getGameData();
+  }
+
   joinRoom(rcodecontroller) async {
     // print('hello' + rcodecontroller);
     String token = await dbInstance.getToken();
@@ -220,6 +239,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               style: fontdesign,
                             ),
                           ),
+                          Flexible(
+                            child: Text(
+                              gameplays.toString(),
+                              style: GoogleFonts.pacifico(
+                                  textStyle: TextStyle(
+                                      fontSize: 30, color: Colors.white)),
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(
@@ -231,6 +258,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Text(
                               'TOTAL WINS :',
                               style: fontdesign,
+                            ),
+                          ),
+                          Flexible(
+                            child: Text(
+                              win.toString(),
+                              style: GoogleFonts.pacifico(
+                                  textStyle: TextStyle(
+                                      fontSize: 30, color: Colors.white)),
                             ),
                           ),
                         ],
