@@ -57,8 +57,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   var win;
 
   getGameData() async {
-    final db =
-        FirebaseDatabase.instance.reference().child('/Users/' + widget.uid);
+    final db = await FirebaseDatabase.instance
+        .reference()
+        .child('/Users/' + widget.uid);
     final DataSnapshot snapshot = await db.once();
     dynamic a = snapshot.value;
     gameplays = a['gameplay'];
@@ -90,8 +91,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     //print(resp);
     dynamic a = snapshot.value;
 
-    // print(a['room_' + roomtoken]);
-    if (a['room_' + roomtoken] = true) {
+    print(a['room_' + roomtoken]);
+    if (a['room_' + roomtoken] != null) {
       var url = 'https://sanskrut-interns.appspot.com/apis/joinroom';
 
       // var url = 'https://localhost:8080/apis/joinroom';
@@ -145,7 +146,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
         print(error);
       }
     } else {
+      pr.hide();
       print('no');
+      return showDialog<void>(
+          context: context,
+          barrierDismissible: false, // user must tap button!
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Colors.brown[600],
+              title: Text(
+                'No room created',
+                style: TextStyle(color: Colors.white),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('close'),
+                  onPressed: () {
+                    pr.hide();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
     }
   }
 
@@ -256,7 +279,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           Flexible(
                             child: Text(
-                              'TOTAL WINS :',
+                              'TOTAL WINS :   ',
                               style: fontdesign,
                             ),
                           ),
@@ -351,12 +374,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       width: 180,
                                       color: Colors.brown[400],
                                       onPressed: () async {
-                                        print(rcodecontroller.text);
-                                        pr.show();
-                                        await joinRoom(rcodecontroller.text);
+                                        if (rcodecontroller.text != '') {
+                                          print(rcodecontroller.text);
+                                          pr.show();
+                                          await joinRoom(rcodecontroller.text);
 
-                                        rcodecontroller.clear();
-
+                                          rcodecontroller.clear();
+                                        } else {
+                                          print("empty");
+                                        }
                                         // Navigator.push(
                                         //   context,
                                         //   MaterialPageRoute(

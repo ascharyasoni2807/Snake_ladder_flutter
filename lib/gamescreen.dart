@@ -21,13 +21,14 @@ class BoardScreen extends StatelessWidget {
       home: SafeArea(
         child: Scaffold(
           body: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
+              // width: MediaQuery.of(context).size.width,
+              // height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/wooden.jpg'),
-                  fit: BoxFit.cover,
-                ),
+                color: Color(0xff1e272e),
+                // image: DecorationImage(
+                //   image: AssetImage('assets/images/wooden.jpg'),
+                //   fit: BoxFit.cover,
+                // ),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 0.5),
@@ -340,199 +341,203 @@ class _BoardState extends State<Board> {
 
   @override
   Widget build(BuildContext context) {
+    var s = MediaQuery.of(context).size;
+    double side = s.width * 0.8;
     return SafeArea(
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 10,
+            height: 20,
           ),
-          Container(
-            //margin: EdgeInsets.only(top: 5),
-            height: 412,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              image: DecorationImage(
-                  image: AssetImage('assets/images/board3.png'),
-                  fit: BoxFit.fill),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
             ),
-            // decoration: BoxDecoration(
-            //     image: DecorationImage(
-            //         image: AssetImage('assets/images/board.png'),
-            //         fit: BoxFit.fitHeight)),
-            //  color: Colors.blue,
-            child: GridView.builder(
-              primary: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: 100,
-              reverse: true,
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 10,
-                //  childAspectRatio: 1.1,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                //  key:
-                // list[index];
+            child: Stack(
+              children: [
+                AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                    color: Colors.white,
+                    // width: side,
+                  ),
+                ),
+                Image.asset(
+                  'assets/images/board3.png',
+                  // height: side,
+                  fit: BoxFit.cover,
+                ),
+                GridView.builder(
+                  primary: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: 100,
+                  reverse: true,
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 10,
+                    //  childAspectRatio: 1.1,
+                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    //  key:
+                    // list[index];
 
-                return Stack(children: [
-                  // index == a
-                  Container(
-                      height: 100,
-                      alignment: Alignment.bottomCenter,
-                      child: Center(
-                        child: Column(children: [
-                          valuesofplayer.length > 0
-                              ? index ==
-                                          boardToIndex(
-                                              valuesofplayer[0]['position']) &&
-                                      boardToIndex(
-                                              valuesofplayer[0]['position']) !=
-                                          null &&
-                                      boardToIndex(
-                                              valuesofplayer[0]['position']) !=
-                                          100
-                                  // valuesofplayer[0]['position'] != null
-                                  ? Container(
-                                      height: 11,
-                                      alignment: Alignment.center,
-                                      child:
-                                          Image.asset('assets/images/tok0.png'))
-                                  : index ==
+                    return Stack(children: [
+                      // index == a
+                      Container(
+                          height: 100,
+                          alignment: Alignment.bottomCenter,
+                          child: Center(
+                            child: Column(children: [
+                              valuesofplayer.length > 0
+                                  ? index ==
                                               boardToIndex(valuesofplayer[0]
                                                   ['position']) &&
                                           boardToIndex(valuesofplayer[0]
-                                                  ['position']) ==
-                                              boardToIndex(99)
-                                      ? Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Winnerpopup(
-                                                    passname: valuesofplayer[0]
-                                                        ['name'],
-                                                  )))
-                                      : SizedBox.shrink()
-                              : SizedBox.shrink(),
-                          valuesofplayer.length > 1
-                              ? index == boardToIndex(valuesofplayer[1]['position']) &&
-                                      boardToIndex(
-                                              valuesofplayer[1]['position']) !=
-                                          null &&
-                                      boardToIndex(
-                                              valuesofplayer[1]['position']) !=
-                                          100
-                                  ? Container(
-                                      height: 11,
-                                      alignment: Alignment.center,
-                                      child:
-                                          Image.asset('assets/images/tok1.png'))
-                                  : index ==
+                                                  ['position']) !=
+                                              null &&
+                                          boardToIndex(valuesofplayer[0]
+                                                  ['position']) !=
+                                              100
+                                      // valuesofplayer[0]['position'] != null
+                                      ? Container(
+                                          height: 11,
+                                          alignment: Alignment.center,
+                                          child: Image.asset(
+                                              'assets/images/tok0.png'))
+                                      : index ==
+                                                  boardToIndex(valuesofplayer[0]
+                                                      ['position']) &&
+                                              boardToIndex(valuesofplayer[0]
+                                                      ['position']) ==
+                                                  boardToIndex(99)
+                                          ? Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Winnerpopup(
+                                                        passname:
+                                                            valuesofplayer[0]
+                                                                ['name'],
+                                                      )))
+                                          : SizedBox.shrink()
+                                  : SizedBox.shrink(),
+                              valuesofplayer.length > 1
+                                  ? index == boardToIndex(valuesofplayer[1]['position']) &&
+                                          boardToIndex(valuesofplayer[1]['position']) !=
+                                              null &&
+                                          boardToIndex(valuesofplayer[1]['position']) !=
+                                              100
+                                      ? Container(
+                                          height: 11,
+                                          alignment: Alignment.center,
+                                          child: Image.asset(
+                                              'assets/images/tok1.png'))
+                                      : index ==
+                                                  boardToIndex(valuesofplayer[1]
+                                                      ['position']) &&
                                               boardToIndex(valuesofplayer[1]
-                                                  ['position']) &&
-                                          boardToIndex(valuesofplayer[1]
-                                                  ['position']) ==
-                                              boardToIndex(99)
-                                      ? Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Winnerpopup(
-                                                  passname: valuesofplayer[1]
-                                                      ['name'])))
-                                      : SizedBox.shrink()
-                              : SizedBox.shrink(),
-                          valuesofplayer.length > 2
-                              ? index == boardToIndex(valuesofplayer[2]['position']) &&
-                                      boardToIndex(
-                                              valuesofplayer[2]['position']) !=
-                                          null &&
-                                      boardToIndex(
-                                              valuesofplayer[2]['position']) !=
-                                          100
-                                  //  values[2]['position'] != null
-                                  ? Container(
-                                      height: 10,
-                                      alignment: Alignment.center,
-                                      child:
-                                          Image.asset('assets/images/tok2.png'))
-                                  : index ==
+                                                      ['position']) ==
+                                                  boardToIndex(99)
+                                          ? Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Winnerpopup(
+                                                          passname:
+                                                              valuesofplayer[1]
+                                                                  ['name'])))
+                                          : SizedBox.shrink()
+                                  : SizedBox.shrink(),
+                              valuesofplayer.length > 2
+                                  ? index == boardToIndex(valuesofplayer[2]['position']) &&
+                                          boardToIndex(valuesofplayer[2]['position']) !=
+                                              null &&
+                                          boardToIndex(valuesofplayer[2]['position']) !=
+                                              100
+                                      //  values[2]['position'] != null
+                                      ? Container(
+                                          height: 10,
+                                          alignment: Alignment.center,
+                                          child: Image.asset(
+                                              'assets/images/tok2.png'))
+                                      : index ==
+                                                  boardToIndex(valuesofplayer[2]
+                                                      ['position']) &&
                                               boardToIndex(valuesofplayer[2]
-                                                  ['position']) &&
-                                          boardToIndex(valuesofplayer[2]
-                                                  ['position']) ==
+                                                      ['position']) ==
+                                                  100
+                                          ? Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Winnerpopup(
+                                                          passname:
+                                                              valuesofplayer[2]
+                                                                  ['name'])))
+                                          : SizedBox.shrink()
+                                  : SizedBox.shrink(),
+                              valuesofplayer.length > 3
+                                  ? index == boardToIndex(valuesofplayer[3]['position']) &&
+                                          boardToIndex(valuesofplayer[3]['position']) !=
+                                              null &&
+                                          boardToIndex(valuesofplayer[3]['position']) !=
                                               100
-                                      ? Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Winnerpopup(
-                                                  passname: valuesofplayer[2]
-                                                      ['name'])))
-                                      : SizedBox.shrink()
-                              : SizedBox.shrink(),
-                          valuesofplayer.length > 3
-                              ? index == boardToIndex(valuesofplayer[3]['position']) &&
-                                      boardToIndex(
-                                              valuesofplayer[3]['position']) !=
-                                          null &&
-                                      boardToIndex(
-                                              valuesofplayer[3]['position']) !=
-                                          100
-                                  ? Container(
-                                      height: 10,
-                                      alignment: Alignment.center,
-                                      child:
-                                          Image.asset('assets/images/tok3.png'))
-                                  : index ==
+                                      ? Container(
+                                          height: 10,
+                                          alignment: Alignment.center,
+                                          child: Image.asset(
+                                              'assets/images/tok3.png'))
+                                      : index ==
+                                                  boardToIndex(valuesofplayer[3]
+                                                      ['position']) &&
                                               boardToIndex(valuesofplayer[3]
-                                                  ['position']) &&
-                                          boardToIndex(valuesofplayer[3]
-                                                  ['position']) ==
-                                              100
-                                      ? Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Winnerpopup(
-                                                  passname: valuesofplayer[3]
-                                                      ['name'])))
-                                      : SizedBox.shrink()
-                              : SizedBox.shrink()
-                          // ],
-                        ]),
-                      )),
-                  // : SizedBox.shrink(),
-                  Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black)),
-                      child: Center(
-                          // child: ((10 <= index && index <= 19) ||
-                          //         (30 <= index && index <= 39) ||
-                          //         (50 <= index && index <= 59) ||
-                          //         (70 <= index && index <= 79) ||
-                          //         (90 <= index && index <= 99))
-                          //     ? Text(((indexToBoard(index) + 1)).toString())
-                          child: Text(indexToBoard(index)))
-                      // color: Colors.yellow,
+                                                      ['position']) ==
+                                                  100
+                                          ? Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Winnerpopup(
+                                                          passname:
+                                                              valuesofplayer[3]
+                                                                  ['name'])))
+                                          : SizedBox.shrink()
+                                  : SizedBox.shrink()
+                              // ],
+                            ]),
+                          )),
+                      // : SizedBox.shrink(),
+                      Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black)),
+                          child: Center(
+                              // child: ((10 <= index && index <= 19) ||
+                              //         (30 <= index && index <= 39) ||
+                              //         (50 <= index && index <= 59) ||
+                              //         (70 <= index && index <= 79) ||
+                              //         (90 <= index && index <= 99))
+                              //     ? Text(((indexToBoard(index) + 1)).toString())
+                              child: Text(indexToBoard(index)))
+                          // color: Colors.yellow,
 
-                      )
-                ]);
-              },
+                          )
+                    ]);
+                  },
+                ),
+              ],
             ),
-            //s color: Colors.blue,
-
-            //     Image.asset('assets/images/board.png')
           ),
 
           //Image.asset('assets/images/board.png'),
           SizedBox(height: 10),
 
-          Center(
-            child: Text(
-              'CHANCE of  :  ' + naming[memberChance - 1].toString(),
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 13.0,
-                  fontWeight: FontWeight.bold),
+          Text(
+            'Chance of  :  ' + naming[memberChance - 1].toString(),
+            style: GoogleFonts.raleway(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.white,
             ),
           ),
           SizedBox(height: 10),
