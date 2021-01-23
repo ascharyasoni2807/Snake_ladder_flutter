@@ -9,6 +9,8 @@ import 'package:gamesnl/signin.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import 'home.dart';
+
 class Roomscreen extends StatefulWidget {
   final String roomToken;
   final String name;
@@ -100,10 +102,22 @@ class _RoomscreenState extends State<Roomscreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Color(0xff1e272e),
+
+          title: Text('Room Screen',
+              style: GoogleFonts.pacifico(
+                  textStyle: TextStyle(fontSize: 22, color: Colors.white))),
+          // SizedBox(
+          //   width: 230,
+          // ),
+        ),
         body: Container(
           decoration: BoxDecoration(
+              //  color: Color(0xff1e272e).withOpacity(0.975)
               image: DecorationImage(
-            image: AssetImage('assets/images/wooden.jpg'),
+            image: AssetImage('assets/images/woods.jpg'),
             fit: BoxFit.cover,
           )),
           width: MediaQuery.of(context).size.width,
@@ -150,7 +164,7 @@ class _RoomscreenState extends State<Roomscreen> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 20,
               ),
               Container(
                 child: Text(
@@ -159,7 +173,7 @@ class _RoomscreenState extends State<Roomscreen> {
                       textStyle: TextStyle(fontSize: 25, color: Colors.white)),
                 ),
               ),
-              SizedBox(height: 1),
+              SizedBox(height: 2),
               Container(
                 child: Text(
                   widget.roomToken.toString(),
@@ -217,8 +231,8 @@ class _RoomscreenState extends State<Roomscreen> {
                         itemCount: players.length,
                       )
                     : Container(
-                        height: 15,
-                        width: 15,
+                        height: 10,
+                        width: 10,
                         child: CircularProgressIndicator()),
               ),
               SizedBox(
@@ -228,11 +242,11 @@ class _RoomscreenState extends State<Roomscreen> {
                   ? Opacity(
                       opacity: players.length > 1 ? 1 : 0.5,
                       child: RaisedButton(
-                        color: Colors.brown[700],
-                        splashColor: Colors.brown[200],
+                        color: Color(0xff1e272e),
+                        splashColor: Colors.grey[100],
                         onPressed: () {
                           setState(() {
-                            players.length <= 1
+                            players.length <= 0
                                 ? print('not starting')
                                 : setgameState();
                           });
@@ -240,7 +254,7 @@ class _RoomscreenState extends State<Roomscreen> {
 
                         child: Text(
                           'Start Game',
-                          style: GoogleFonts.roboto(
+                          style: GoogleFonts.nanumGothic(
                               textStyle:
                                   TextStyle(fontSize: 13, color: Colors.white)),
                         ),

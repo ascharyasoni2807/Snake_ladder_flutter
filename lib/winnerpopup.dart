@@ -13,6 +13,7 @@ class _WinnerpopupState extends State<Winnerpopup> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Color(0xff1e272e),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15))),
       title: Text('Winner Is :'),

@@ -102,7 +102,7 @@ class _BoardState extends State<Board> {
   int playerNumber = 1;
   List playerUIDS = [];
   List playersin = [];
-  List positionsofplayers = [];
+  List positionsofplayers = [0, 0, 0, 0];
   //final List positions = [];
   List naming = [];
   readPlayers() {
@@ -122,29 +122,33 @@ class _BoardState extends State<Board> {
       }
 
       for (var i = 0; i <= playersin.length - 1; i++) {
-        positionsofplayers.add(playersin[i]['position']);
-      }
-
-      for (var i = 0; i <= playersin.length - 1; i++) {
         naming.add(playersin[i]['name']);
       }
       setState(() {});
       print(naming);
+      print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiin");
+      print(positionsofplayers);
     });
   }
 
   player() {
     FirebaseDatabase.instance
         .reference()
-        .child('/rooms/room_' + widget.roomToken.toString() + '/players')
+        .child(
+            '/rooms/room_' + widget.roomToken.toString() + '/players/player_1')
         .onValue
         .listen((event) {
-      print(event.snapshot.value);
-      print(event.snapshot.value['position']);
-      print('hello');
-      // setState(() {
-      //   //playerPosition();
-      // });
+      final Map value = event.snapshot.value;
+      var positionofp = value.values.toList();
+      if (positionofp[2] == 100) {
+        print('winner mem cahnce');
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Winnerpopup(
+                    passname: valuesofplayer[memberChance - 1]['name'])));
+        // winner();
+      }
     });
   }
 
@@ -177,7 +181,8 @@ class _BoardState extends State<Board> {
       print(body);
       print(naming);
       // liveDice();
-      //  player();
+      readPlayers();
+      // readplayersPos(); //  player();
     }
     //  liveDice();
   }
@@ -249,15 +254,6 @@ class _BoardState extends State<Board> {
 
       valuesofplayer = event.snapshot.value['players'].values.toList();
 
-      if (valuesofplayer[memberChance - 1]['position'] == boardToIndex(100)) {
-        print('winner mem cahnce');
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Winnerpopup(
-                    passname: valuesofplayer[memberChance - 1]['name'])));
-        // winner();
-      }
       setState(() {
         memberChance = event.snapshot.value['memberChance'];
       });
@@ -342,13 +338,13 @@ class _BoardState extends State<Board> {
   @override
   Widget build(BuildContext context) {
     var s = MediaQuery.of(context).size;
-    double side = s.width * 0.8;
+    var size = MediaQuery.of(context).size;
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -438,7 +434,7 @@ class _BoardState extends State<Board> {
                                                       ['position']) &&
                                               boardToIndex(valuesofplayer[1]
                                                       ['position']) ==
-                                                  boardToIndex(99)
+                                                  100
                                           ? Navigator.pushReplacement(
                                               context,
                                               MaterialPageRoute(
@@ -511,14 +507,43 @@ class _BoardState extends State<Board> {
                       Container(
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.black)),
-                          child: Center(
-                              // child: ((10 <= index && index <= 19) ||
-                              //         (30 <= index && index <= 39) ||
-                              //         (50 <= index && index <= 59) ||
-                              //         (70 <= index && index <= 79) ||
-                              //         (90 <= index && index <= 99))
-                              //     ? Text(((indexToBoard(index) + 1)).toString())
-                              child: Text(indexToBoard(index)))
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 6,
+                              ),
+                              index == boardToIndex(100)
+                                  ? Center(
+                                      child:
+                                          Image.asset('assets/images/winn.png'),
+                                    )
+                                  : index == boardToIndex(1)
+                                      ? Center(
+                                          child: Image.asset(
+                                              'assets/images/arrow.png'),
+                                        )
+                                      : (index == boardToIndex(96) ||
+                                                  index == boardToIndex(94) ||
+                                                  index == boardToIndex(75) ||
+                                                  index == boardToIndex(37) ||
+                                                  index == boardToIndex(47) ||
+                                                  index == boardToIndex(28)) ||
+                                              index == boardToIndex(4) ||
+                                              index == boardToIndex(14) ||
+                                              index == boardToIndex(12) ||
+                                              index == boardToIndex(22) ||
+                                              index == boardToIndex(41) ||
+                                              index == boardToIndex(54)
+                                          ? Center(
+                                              child: Text(
+                                              indexToBoard(index),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w900),
+                                            ))
+                                          : Center(
+                                              child: Text(indexToBoard(index)))
+                            ],
+                          )
                           // color: Colors.yellow,
 
                           )
@@ -530,120 +555,152 @@ class _BoardState extends State<Board> {
           ),
 
           //Image.asset('assets/images/board.png'),
-          SizedBox(height: 10),
+          SizedBox(height: 20),
 
-          Text(
-            'Chance of  :  ' + naming[memberChance - 1].toString(),
-            style: GoogleFonts.raleway(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(height: 10),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Container(
-              height: 200,
-              width: MediaQuery.of(context).size.width,
-              // alignment: Alignment.bottomRight,
-              //   color: Colors.white,
-              child: Row(
-                children: [
-                  Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        height: 80,
-                        child: FlatButton(
-                          //height: 40,
-                          //minWidth: 20,
-                          onPressed: () async {
-                            //  index = valuess(index);
-                            //    changeDiceFace();
-                            // winpopup(valuesofplayer[0]['name']);
-                            String loggedid = dbInstance.uid;
-
-                            if (playerUIDS[memberChance - 1] != loggedid) {
-                              print('not your turn');
-                              getCurrentUser();
-                              showInSnackBar('not your turn');
-                              // print(positions);
-                              // print(valuesofplayer);
-                              liveDice();
-                              // playerPosition();
-                            } else {
-                              playSound();
-                              //playerPosition();
-                              diceNumber = await rollDiceChance();
-
-                              // liveDice();
-                              // //  playSound();
-                              // print('======');
-
-                              // setState(() {});
-                              print(diceNumber);
-                            }
-                            var a = indexToBoard(10);
-                            print(a);
-                          },
-                          child: Opacity(
-                              opacity:
-                                  playerUIDS[memberChance - 1] != dbInstance.uid
-                                      ? 0.5
-                                      : 1.0,
-                              child:
-                                  Image.asset('assets/images/$diceNumber.png')),
-                        ),
-                      ),
-                    ],
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Row(
+              children: [
+                Text(
+                  'Chance of  :  ',
+                  style: GoogleFonts.raleway(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                    color: Colors.white,
                   ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                    child: Container(
-                      //color: Colors.white,
-                      height: 230,
-                      width: MediaQuery.of(context).size.width,
-                      child: playersin.length > 0
-                          ? ListView.builder(
-                              itemBuilder: (BuildContext context, int i) {
-                                return ListTile(
-                                  title: Row(
-                                    children: [
-                                      Container(
-                                          height: 10,
-                                          width: 10,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: AssetImage(
-                                                    'assets/images/tok$i.png')),
-                                          )),
-                                      SizedBox(
-                                        width: 2,
-                                      ),
-                                      Text(
-                                        playersin[i]['name'],
-                                        style: GoogleFonts.roboto(
-                                            textStyle: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.white,
-                                                fontWeight: i == 0
-                                                    ? FontWeight.bold
-                                                    : FontWeight.normal)),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                              itemCount: playersin.length,
-                            )
-                          : CircularProgressIndicator(),
+                ),
+                Expanded(
+                  child: Text(
+                    naming[memberChance - 1].toString(),
+                    style: GoogleFonts.raleway(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                      color: Colors.greenAccent,
                     ),
                   ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 5, left: 20),
+            child: Text(
+              'Please press the dice to take your turn.',
+              style: GoogleFonts.raleway(
+                // fontWeight: FontWeight.bold,
+                fontSize: 14,
+                color: Colors.white.withOpacity(0.7),
               ),
+            ),
+          ),
+          SizedBox(height: 20),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: FlatButton(
+                      //height: 40,
+                      //minWidth: 20,
+                      onPressed: () async {
+                        //  index = valuess(index);
+                        //    changeDiceFace();
+                        // winpopup(valuesofplayer[0]['name']);
+                        String loggedid = dbInstance.uid;
+
+                        if (playerUIDS[memberChance - 1] != loggedid) {
+                          print('not your turn');
+                          getCurrentUser();
+                          showInSnackBar('Not Your Turn');
+                          // print(positions);
+                          // print(valuesofplayer);
+                          // liveDice();
+                          // playerPosition();
+                        } else {
+                          playSound();
+                          //playerPosition();
+                          diceNumber = await rollDiceChance();
+
+                          print(diceNumber);
+                        }
+                        var a = indexToBoard(10);
+                        print(a);
+                      },
+                      child: Opacity(
+                        opacity: playerUIDS[memberChance - 1] != dbInstance.uid
+                            ? 0.5
+                            : 1.0,
+                        child: Image.asset(
+                          'assets/images/$diceNumber.png',
+                          width: size.width * 0.3,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    'Players (scroll)',
+                    style: GoogleFonts.raleway(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                  child: playersin.length > 0
+                      ? ListView.builder(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                          ),
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (BuildContext context, int i) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 6,
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 10,
+                                    width: 10,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/tok$i.png')),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  Text(
+                                    playersin[i]['name'],
+                                    style: GoogleFonts.raleway(
+                                      textStyle: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                          fontWeight: i == 0
+                                              ? FontWeight.bold
+                                              : FontWeight.normal),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          itemCount: playersin.length,
+                        )
+                      : CircularProgressIndicator(),
+                ),
+              ],
             ),
           ),
           //  Container(alignment: Alignment.centerLeft, child: readPlayers())

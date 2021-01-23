@@ -117,13 +117,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               barrierDismissible: false, // user must tap button!
               builder: (BuildContext context) {
                 return AlertDialog(
-                  backgroundColor: Colors.brown[600],
+                  backgroundColor: Color(0xff1e272e),
                   title: Text(
                     'Already Started',
                     style: TextStyle(color: Colors.white),
                   ),
                   actions: <Widget>[
                     FlatButton(
+                      color: Colors.grey[800],
                       child: Text('close'),
                       onPressed: () {
                         pr.hide();
@@ -153,13 +154,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           barrierDismissible: false, // user must tap button!
           builder: (BuildContext context) {
             return AlertDialog(
-              backgroundColor: Colors.brown[600],
+              backgroundColor: Color(0xff1e272e),
               title: Text(
                 'No room created',
                 style: TextStyle(color: Colors.white),
               ),
               actions: <Widget>[
                 FlatButton(
+                  color: Colors.grey[800],
                   child: Text('close'),
                   onPressed: () {
                     pr.hide();
@@ -191,7 +193,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: Colors.brown[800],
+          backgroundColor: Color(0xff1e272e),
           actions: [
             IconButton(
               // label: Text('Sign out'),
@@ -216,8 +218,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         body: Container(
           decoration: BoxDecoration(
+              // color: Color(0xff1e272e).withOpacity(0.985),
+
               image: DecorationImage(
-            image: AssetImage('assets/images/wooden.jpg'),
+            image: AssetImage('assets/images/woods.jpg'),
             fit: BoxFit.cover,
           )),
           width: MediaQuery.of(context).size.width,
@@ -228,24 +232,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        'Hello   Player :',
-                        style: fontdesign,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          'Hello   Player :',
+                          style: fontdesign,
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      child: Text(
-                        "'" + widget.name + "'",
-                        style: GoogleFonts.pacifico(
-                            textStyle:
-                                TextStyle(fontSize: 18, color: Colors.white)),
-                      ),
-                    )
-                  ],
+                      Flexible(
+                        child: Text(
+                          "'" + widget.name + "'",
+                          style: GoogleFonts.pacifico(
+                              textStyle:
+                                  TextStyle(fontSize: 18, color: Colors.white)),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 30,
@@ -302,14 +309,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Row(
                       children: [
                         RaisedButton(
-                          color: Colors.brown[700],
-                          splashColor: Colors.brown[200],
+                          color: Color(0xff1e272e),
+                          splashColor: Colors.grey,
                           onPressed: () async {
                             pr.show();
                             final roomToken = await getRoomToken();
                             print('==================');
                             print(roomToken);
-
+                            pr.hide();
                             //ListenPlayers(roomToken);
                             Navigator.push(
                                 context,
@@ -321,9 +328,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                           child: Text(
                             'CREATE ROOM',
-                            style: GoogleFonts.roboto(
+                            style: GoogleFonts.nanumGothic(
                                 textStyle: TextStyle(
-                                    fontSize: 13, color: Colors.white)),
+                                    fontSize: 12, color: Colors.white)),
                           ),
 
                           // child:
@@ -332,13 +339,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           width: 50,
                         ),
                         RaisedButton(
-                          color: Colors.brown[700],
-                          splashColor: Colors.brown[200],
+                          color: Color(0xff1e272e),
+                          splashColor: Colors.grey,
                           onPressed: () {
                             setState(() {
                               Alert(
                                   style: AlertStyle(
-                                      backgroundColor: Colors.brown[800],
+                                      backgroundColor: Color(0xff1e272e),
                                       alertBorder: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(0.0),
@@ -372,7 +379,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   buttons: [
                                     DialogButton(
                                       width: 180,
-                                      color: Colors.brown[400],
+                                      color: Colors.grey[800],
                                       onPressed: () async {
                                         if (rcodecontroller.text != '') {
                                           print(rcodecontroller.text);
@@ -402,9 +409,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             });
                           },
                           child: Text('JOIN ROOM',
-                              style: GoogleFonts.roboto(
+                              style: GoogleFonts.nanumGothic(
                                   textStyle: TextStyle(
-                                      fontSize: 13, color: Colors.white))),
+                                      fontSize: 12, color: Colors.white))),
                         ),
                       ],
                     )),

@@ -36,6 +36,7 @@ class _MyhomeState extends State<Myhome> {
   //  Myhome({Key key, @required this.databasesMethods}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var s = MediaQuery.of(context).size;
     pr = new ProgressDialog(context);
     pr.style(
         message: 'Please Wait...',
@@ -86,21 +87,22 @@ class _MyhomeState extends State<Myhome> {
       // ),
       body: Container(
         decoration: BoxDecoration(
+            // color: Color(0xff3d3d3d),
             image: DecorationImage(
-          image: AssetImage('assets/images/wooden.jpg'),
+          image: AssetImage('assets/images/woods.jpg'),
           fit: BoxFit.cover,
         )),
-        width: MediaQuery.of(context).size.width,
+        // width: MediaQuery.of(context).size.width,
         // color: Colors.orange,
         child: Column(
           children: [
             SizedBox(
-              height: 20,
+              height: 30,
             ),
             /*   */
             Container(
-              height: 275,
-              width: 400,
+              height: s.height * 0.4,
+              width: s.width,
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage('assets/images/SnakeLadderLogo.png'),
