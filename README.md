@@ -12,13 +12,13 @@ STEPS--
 
 
 
-![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611601152.png?raw=true = 250x250)
+![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611601152.png = 250x250)
 
-![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611604980.png?raw=true = 250x250)
-![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611605393.png?raw=true = 250x250)
-![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611605425.png?raw=true = 250x250)
-![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611605512.png?raw=true = 250x250)
+![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611604980.png = 250x250)
+![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611605393.png = 250x250)
+![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611605425.png = 250x250)
+![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611605512.png = 250x250)
 
-![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611605928.png?raw=true = 250x250)
+![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611605928.png = 250x250)
 
 
