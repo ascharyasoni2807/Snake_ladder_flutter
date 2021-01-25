@@ -21,7 +21,7 @@ class DatabaseMethods {
   }
 
   Future<String> signInWithGoogle() async {
-    final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+    // final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
     final GoogleSignInAccount googleSignInAccount =
         await GoogleSignIn().signIn();

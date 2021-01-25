@@ -76,7 +76,7 @@ class _MyAppState extends State<MyApp> {
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/images/wooden.jpg'),
+                image: AssetImage('assets/images/woods.jpg'),
                 fit: BoxFit.cover)),
         width: MediaQuery.of(context).size.width,
         child: Column(
