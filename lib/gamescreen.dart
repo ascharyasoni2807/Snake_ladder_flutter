@@ -23,7 +23,6 @@ class BoardScreen extends StatelessWidget {
           body: Container(
               decoration: BoxDecoration(
                 color: Color(0xff1e272e),
-       
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 0.5),
@@ -128,7 +127,7 @@ class _BoardState extends State<Board> {
       for (var i = 0; i <= playersin.length - 1; i++) {
         naming.add(playersin[i]['name']);
       }
-      setState(() {});
+      // setState(() {});
       print(naming);
       print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiin");
       // print(boardToIndex(valuesofplayer[0]['position']));
@@ -408,10 +407,9 @@ class _BoardState extends State<Board> {
                                               alignment: Alignment.center,
                                               child: Image.asset(
                                                   'assets/images/tok0.png'))
-                                          : index != 0 &&
-                                                  boardToIndex(valuesofplayer[0]
-                                                          ['position']) ==
-                                                      90
+                                          : boardToIndex(valuesofplayer[0]
+                                                      ['position']) ==
+                                                  90
                                               ? winningbox(
                                                   valuesofplayer[0]['name'])
                                               : SizedBox.shrink()
@@ -427,16 +425,15 @@ class _BoardState extends State<Board> {
                                                   null &&
                                               boardToIndex(valuesofplayer[1]
                                                       ['position']) !=
-                                                  100
+                                                  90
                                           ? Container(
                                               height: 11,
                                               alignment: Alignment.center,
                                               child: Image.asset(
                                                   'assets/images/tok1.png'))
-                                          : index != 0 &&
-                                                  boardToIndex(valuesofplayer[1]
-                                                          ['position']) ==
-                                                      90
+                                          : boardToIndex(valuesofplayer[1]
+                                                      ['position']) ==
+                                                  90
                                               ? winningbox(
                                                   valuesofplayer[1]['name'])
                                               : SizedBox.shrink()
@@ -452,17 +449,16 @@ class _BoardState extends State<Board> {
                                                   null &&
                                               boardToIndex(valuesofplayer[2]
                                                       ['position']) !=
-                                                  100
+                                                  90
                                           //  values[2]['position'] != null
                                           ? Container(
                                               height: 10,
                                               alignment: Alignment.center,
                                               child: Image.asset(
                                                   'assets/images/tok2.png'))
-                                          : index != 0 &&
-                                                  boardToIndex(valuesofplayer[2]
-                                                          ['position']) ==
-                                                      90
+                                          : boardToIndex(valuesofplayer[2]
+                                                      ['position']) ==
+                                                  90
                                               ? winningbox(
                                                   valuesofplayer[2]['name'])
                                               : SizedBox.shrink()
@@ -478,16 +474,15 @@ class _BoardState extends State<Board> {
                                                   null &&
                                               boardToIndex(valuesofplayer[3]
                                                       ['position']) !=
-                                                  100
+                                                  90
                                           ? Container(
                                               height: 10,
                                               alignment: Alignment.center,
                                               child: Image.asset(
                                                   'assets/images/tok3.png'))
-                                          : index != 0 &&
-                                                  boardToIndex(valuesofplayer[3]
-                                                          ['position']) ==
-                                                      90
+                                          : boardToIndex(valuesofplayer[3]
+                                                      ['position']) ==
+                                                  90
                                               ? winningbox(
                                                   valuesofplayer[3]['name'])
                                               : SizedBox.shrink()
