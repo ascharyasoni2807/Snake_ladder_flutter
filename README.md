@@ -1,16 +1,24 @@
 # gamesnl
 
 A new Flutter project.
+SNAKE AND LADDER MULTIPLAYER ONLINE GAME 
 
-## Getting Started
+STEPS-- 
+1.LOG IN 
+2.CREATE ROOM / JOIN ROOM
+3.START GAME
+4.PLAY 
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611601152.png?raw=true = 250x250)
+
+![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611604980.png?raw=true = 250x250)
+![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611605393.png?raw=true = 250x250)
+![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611605425.png?raw=true = 250x250)
+![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611605512.png?raw=true = 250x250)
+
+![image](https://github.com/ascharyasoni2807/Snake_ladder_flutter/blob/main/Scrrenshots/Screenshot_1611605928.png?raw=true = 250x250)
+
+
