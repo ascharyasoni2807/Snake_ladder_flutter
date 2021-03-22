@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
+import 'package:gamesnl/devicescreen.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:gamesnl/gamescreen.dart';
 
@@ -23,9 +25,15 @@ void main() async {
   await Firebase.initializeApp();
 
   runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyApp(),
+   
+    Shortcuts(
+       shortcuts: <LogicalKeySet, Intent>{
+        LogicalKeySet(LogicalKeyboardKey.select): const ActivateIntent(),
+      },
+          child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MyApp(),
+      ),
     ),
   );
 }
@@ -50,7 +58,7 @@ class _MyAppState extends State<MyApp> {
         //     ? Navigator.pushReplacement(context,
         //         MaterialPageRoute(builder: (context) => ProfileScreen()))
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Myhome()));
+            context, MaterialPageRoute(builder: (context) => Device()));
       },
     );
   }
@@ -73,39 +81,47 @@ class _MyAppState extends State<MyApp> {
     //     title: Text("loading g"),
     //   );
     return Scaffold(
+
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/images/wooden.jpg'),
-                fit: BoxFit.cover)),
+                image: AssetImage('assets/images/woods.jpg'),
+                fit: BoxFit.fill)),
         width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: [
-            SizedBox(height: 300),
-            Center(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.30),
-                  CircularProgressIndicator(
-                      backgroundColor: Colors.white,
-                      strokeWidth: 5,
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(Colors.brown)),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text("Loading Game",
-                      style: GoogleFonts.ultra(
-                          textStyle:
-                              TextStyle(color: Colors.white, fontSize: 14)))
-                ],
-              ),
-            )
-          ],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // SizedBox(height: 250),
+              Center(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // SizedBox(width: MediaQuery.of(context).size.width * 0.30),
+                    CircularProgressIndicator(
+                        backgroundColor: Colors.white,
+                        strokeWidth: 5,
+                        valueColor:
+                            new AlwaysStoppedAnimation<Color>(Colors.grey)),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Center(
+                      child: Text("Loading Game",
+                          style: GoogleFonts.ultra(
+                              textStyle:
+                                  TextStyle(color: Colors.white, fontSize: 14))),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
+    
     );
   }
 }

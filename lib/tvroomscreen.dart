@@ -1,15 +1,15 @@
 // import 'dart:htm
-import 'dart:convert';
-import 'package:gamesnl/gamescreen.dart';
-import 'package:http/http.dart' as http;
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'dart:convert';
+import 'package:gamesnl/tvgamescreen.dart';
+// import 'package:http/http.dart' as http;
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gamesnl/signin.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-import 'home.dart';
+import 'tvhome.dart';
 
 class Roomscreen extends StatefulWidget {
   final String roomToken;
@@ -127,15 +127,18 @@ class _RoomscreenState extends State<Roomscreen> {
               SizedBox(height: MediaQuery.of(context).size.width * 0.050),
               /*   */
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.only(left:350.0),
                 child: Row(
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
+                      // alignment: Alignment.center,
                       child: Text(
                         "Room Creater : ",
                         style: GoogleFonts.roboto(
                             textStyle:
-                                TextStyle(fontSize: 20, color: Colors.white)),
+                                TextStyle(fontSize: 20, color: Colors.white , fontWeight: FontWeight.bold)),
                       ),
                     ),
                     Container(
@@ -230,27 +233,23 @@ class _RoomscreenState extends State<Roomscreen> {
                         },
                         itemCount: players.length,
                       )
-                    : Column(
-                      children: [
-                        Container(
-                            height:50,
-                            width: 50,
-                            child: CircularProgressIndicator()),
-                      ],
-                    ),
+                    : Container(
+                        height: 10,
+                        width: 10,
+                        child: CircularProgressIndicator()),
               ),
               SizedBox(
                 height: 30,
               ),
               players.length > 0 && dbInstance.uid == players[0]['playerUID']
                   ? Opacity(
-                      opacity: players.length > 1 ? 1 : 0.5,
+                      opacity: players.length >1 ? 1 : 0.5,
                       child: RaisedButton(
                         color: Color(0xff1e272e),
                         splashColor: Colors.grey[100],
                         onPressed: () {
                           setState(() {
-                            players.length < 1
+                            players.length <= 1
                                 ? print('not starting')
                                 : setgameState();
                           });
