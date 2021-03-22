@@ -108,7 +108,10 @@ class _RoomscreenState extends State<Roomscreen> {
 
           title: Text('Room Screen',
               style: GoogleFonts.pacifico(
-                  textStyle: TextStyle(fontSize: 22, color: Colors.white))),
+                  textStyle: TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700))),
           // SizedBox(
           //   width: 230,
           // ),
@@ -134,8 +137,10 @@ class _RoomscreenState extends State<Roomscreen> {
                       child: Text(
                         "Room Creater : ",
                         style: GoogleFonts.roboto(
-                            textStyle:
-                                TextStyle(fontSize: 20, color: Colors.white)),
+                            textStyle: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700)),
                       ),
                     ),
                     Container(
@@ -154,9 +159,11 @@ class _RoomscreenState extends State<Roomscreen> {
                           players.length > 0
                               ? players[0]['name']
                               : "Loading Creator...",
-                          style: GoogleFonts.roboto(
-                              textStyle:
-                                  TextStyle(fontSize: 20, color: Colors.white)),
+                          style: GoogleFonts.raleway(
+                              textStyle: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          )),
                         ),
                       ),
                     ),
@@ -164,13 +171,16 @@ class _RoomscreenState extends State<Roomscreen> {
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 40,
               ),
               Container(
                 child: Text(
                   'Room number :',
-                  style: GoogleFonts.roboto(
-                      textStyle: TextStyle(fontSize: 25, color: Colors.white)),
+                  style: GoogleFonts.raleway(
+                      textStyle: TextStyle(
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700)),
                 ),
               ),
               SizedBox(height: 2),
@@ -187,9 +197,11 @@ class _RoomscreenState extends State<Roomscreen> {
               Container(
                 height: 50,
                 child: Text('Joined Players:',
-                    style: GoogleFonts.roboto(
-                        textStyle:
-                            TextStyle(fontSize: 25, color: Colors.white))),
+                    style: GoogleFonts.raleway(
+                        textStyle: TextStyle(
+                            fontSize: 25,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700))),
               ),
               Container(
                 //   color: Colors.white,

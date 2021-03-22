@@ -25,8 +25,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   DatabaseMethods databaseMethods = dbInstance;
   FirebaseAuth auth = FirebaseAuth.instance;
-  var fontdesign = GoogleFonts.ultra(
-      textStyle: TextStyle(fontSize: 20, color: Colors.white));
+  var fontdesign = GoogleFonts.staatliches(
+      textStyle: TextStyle(fontSize: 30, color: Colors.white));
   String roomToken;
   TextEditingController rcodecontroller = new TextEditingController();
   getRoomToken() async {
@@ -59,12 +59,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   getGameData() async {
     final db = await FirebaseDatabase.instance
         .reference()
-        .child('/Users/' + widget.uid);
-    final DataSnapshot snapshot = await db.once();
-    dynamic a = snapshot.value;
-    gameplays = a['gameplay'];
+        .child('/Users/' + widget.uid)
+        .once()
+        .then((DataSnapshot snapshot) {
+      dynamic a = snapshot.value;
+      gameplays = a['gameplay'];
 
-    win = a['wins'];
+      win = a['wins'];
+    });
+
     setState(() {});
   }
 
@@ -237,18 +240,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Flexible(
-                        child: Text(
-                          'Hello   Player :',
-                          style: fontdesign,
-                        ),
+                      Text(
+                        'Hello   Player :',
+                        style: fontdesign,
                       ),
                       Flexible(
                         child: Text(
                           "'" + widget.name + "'",
                           style: GoogleFonts.pacifico(
-                              textStyle:
-                                  TextStyle(fontSize: 18, color: Colors.white)),
+                              textStyle: TextStyle(
+                                  fontSize: 20, color: Colors.greenAccent)),
                         ),
                       )
                     ],
@@ -263,18 +264,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Row(
                         children: [
-                          Flexible(
-                            child: Text(
-                              'TOTAL GAMEPLAYS :',
-                              style: fontdesign,
-                            ),
+                          Text(
+                            'TOTAL  GAMEPLAYS :      ',
+                            style: fontdesign,
                           ),
                           Flexible(
                             child: Text(
                               gameplays.toString(),
                               style: GoogleFonts.pacifico(
                                   textStyle: TextStyle(
-                                      fontSize: 30, color: Colors.white)),
+                                      fontSize: 30, color: Colors.greenAccent)),
                             ),
                           ),
                         ],
@@ -286,7 +285,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           Flexible(
                             child: Text(
-                              'TOTAL WINS :   ',
+                              'TOTAL WINS :                  ',
                               style: fontdesign,
                             ),
                           ),
@@ -295,7 +294,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               win.toString(),
                               style: GoogleFonts.pacifico(
                                   textStyle: TextStyle(
-                                      fontSize: 30, color: Colors.white)),
+                                      fontSize: 30, color: Colors.greenAccent)),
                             ),
                           ),
                         ],
