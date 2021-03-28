@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:gamesnl/winnerpopup.dart';
+import 'package:gamesnl/tvwinnerpopup.dart';
 import 'package:gamesnl/signin.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -21,14 +21,8 @@ class BoardScreen extends StatelessWidget {
       home: SafeArea(
         child: Scaffold(
           body: Container(
-              // width: MediaQuery.of(context).size.width,
-              // height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                 color: Color(0xff1e272e),
-                // image: DecorationImage(
-                //   image: AssetImage('assets/images/wooden.jpg'),
-                //   fit: BoxFit.cover,
-                // ),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 0.5),
@@ -100,12 +94,12 @@ class _BoardState extends State<Board> {
     }
   }
 
-  getCurrentUser() {
-    var currentuser = dbInstance.user;
+  // getCurrentUser() {
+  //   var currentuser = dbInstance.user;
 
-    print(currentuser.uid);
-    //print(currentuser);
-  }
+  //   print(currentuser.uid);
+  //   //print(currentuser);
+  // }
 
   int diceNumber = 0;
   int playerNumber = 1;
@@ -278,7 +272,7 @@ class _BoardState extends State<Board> {
   @override
   void initState() {
     Board();
-    getCurrentUser();
+    // getCurrentUser();
     readPlayers();
     //playerPosition();
     print(widget.roomToken);
@@ -408,7 +402,7 @@ class _BoardState extends State<Board> {
                           100
                                     // valuesofplayer[0]['position'] != null
                                     ? Container(
-                      height: 11,
+                      height: 17,
                       alignment: Alignment.center,
                       child: Image.asset(
                           'assets/images/tok0.png'))
@@ -593,7 +587,7 @@ class _BoardState extends State<Board> {
 
                     if (playerUIDS[memberChance - 1] != loggedid) {
                       print('not your turn');
-                      getCurrentUser();
+                      // getCurrentUser();
                       showInSnackBar('Not Your Turn');
                       // print(positions);
                       // print(valuesofplayer);

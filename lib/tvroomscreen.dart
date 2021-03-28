@@ -13,9 +13,9 @@ import 'tvhome.dart';
 
 class Roomscreen extends StatefulWidget {
   final String roomToken;
-  final String name;
 
-  Roomscreen({this.roomToken, this.name});
+
+  Roomscreen({this.roomToken});
 
   @override
   _RoomscreenState createState() => _RoomscreenState();
@@ -48,6 +48,7 @@ class _RoomscreenState extends State<Roomscreen> {
     // var url = 'https://sanskrut-interns.appspot.com/apis/setState';
 
     String token = await dbInstance.getToken();
+    print(widget.roomToken);
     FirebaseDatabase.instance
         .reference()
         .child('/rooms/room_' + widget.roomToken.toString())
@@ -67,6 +68,7 @@ class _RoomscreenState extends State<Roomscreen> {
         .onValue
         .listen((event) {
       //  print("in data");
+      print('fir se chala');
       print(event.snapshot.value);
       if (event.snapshot.value == false) {
         // navigate to game

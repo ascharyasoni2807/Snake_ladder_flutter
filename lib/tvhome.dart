@@ -108,34 +108,49 @@ class _TVMyhomeState extends State<TVMyhome> {
                 child: RaisedButton(
                   splashColor: Colors.grey,
                   // ignore: deprecated_member_use
-                  onPressed: () {
+                  onPressed: () async{
                     pr.show();
-                    databasesMethods.signInWithGoogle().then((value) async {
-                      // print(value);
+                     dynamic result =  await  DatabaseMethods().signInAnon();
+                      User user = result ;
+                      print(user.uid);
 
-                      if (value != null) {
-                        var emails = databasesMethods.email;
-
-                        var names = databasesMethods.name;
-                        var uids = databasesMethods.uid;
-                        //   HelperFunctions.saveUserLoggedInSharedPreference(true);
-
-                        try {
-                          setUser(names, emails, uids);
-                          //  pr.show();
-                          Navigator.pushReplacement(
+                  if (user!=null){
+                      Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ProfileScreen(
-                                      name: databasesMethods.name,
-                                      email: databasesMethods.email,
-                                      uid: databasesMethods.uid)));
-                        } catch (e) {
-                          print(e);
-                        }
-                        print(databasesMethods.email);
-                      }
-                    });
+                                    uid: user.uid,
+                                  ))
+                                  );
+                  }else {
+                    print('error');                  }
+                   
+                    // databasesMethods.signInWithGoogle().then((value) async {
+                    //   // print(value);
+
+                    //   if (value != null) {
+                    //     var emails = databasesMethods.email;
+
+                    //     var names = databasesMethods.name;
+                    //     var uids = databasesMethods.uid;
+                    //     //   HelperFunctions.saveUserLoggedInSharedPreference(true);
+
+                    //     try {
+                    //       setUser(names, emails, uids);
+                    //       //  pr.show();
+                    //       Navigator.pushReplacement(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //               builder: (context) => ProfileScreen(
+                    //                   name: databasesMethods.name,
+                    //                   email: databasesMethods.email,
+                    //                   uid: databasesMethods.uid)));
+                    //     } catch (e) {
+                    //       print(e);
+                    //     }
+                    //     print(databasesMethods.email);
+                    //   }
+                    // });
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),

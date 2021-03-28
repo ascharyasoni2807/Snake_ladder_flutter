@@ -20,6 +20,17 @@ class DatabaseMethods {
     return await _auth.currentUser.getIdToken(true);
   }
 
+
+signInAnon() async {
+  try {
+      UserCredential result =    await _auth.signInAnonymously(); 
+     User user =  result.user;
+     return user;
+  }catch (e ){
+    print(e);
+  }
+}
+
   Future<String> signInWithGoogle() async {
     // final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 

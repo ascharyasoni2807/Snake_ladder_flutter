@@ -13,9 +13,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'dart:io';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({this.name, this.email, this.uid});
-  final String name;
-  final String email;
+  ProfileScreen({ this.uid});
+
   final String uid;
 
   @override
@@ -53,24 +52,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  var gameplays;
-  var win;
+  
 
-  getGameData() async {
-    final db = await FirebaseDatabase.instance
-        .reference()
-        .child('/Users/' + widget.uid);
-    final DataSnapshot snapshot = await db.once();
-    dynamic a = snapshot.value;
-    gameplays = a['gameplay'];
+  // getGameData() async {
+  //   final db = await FirebaseDatabase.instance
+  //       .reference()
+  //       .child('/Users/' + widget.uid);
+  //   final DataSnapshot snapshot = await db.once();
+  //   dynamic a = snapshot.value;
+  //   gameplays = a['gameplay'];
 
-    win = a['wins'];
-    setState(() {});
-  }
+  //   win = a['wins'];
+  //   setState(() {});
+  // }
 
   @override
   void initState() {
-    getGameData();
+   
   }
 
   joinRoom(rcodecontroller) async {
@@ -78,7 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String token = await dbInstance.getToken();
 
     String roomtoken = rcodecontroller;
-    var names = widget.name;
+    // var names = widget.name;
     var uids = widget.uid;
     print('oohhhh' + roomtoken);
     getUsers() {
@@ -101,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         HttpHeaders.contentTypeHeader: 'application/json'
       };
 
-      final data = {'enterid': roomtoken, 'entername': names, 'uid': uids};
+      final data = {'enterid': roomtoken, 'entername': 'Anonymous', 'uid': uids};
       String body = jsonEncode(data);
       try {
         final dbs = FirebaseDatabase.instance
@@ -135,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 );
               });
         } else {
-          var resp = await http.post(url, headers: headers, body: body);
+          // var resp = await http.post(url, headers: headers, body: body);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -236,20 +234,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      
+                      
                       Flexible(
                         child: Text(
-                          'Hello   Player :',
-                          style: fontdesign,
-                        ),
-                      ),
-                      Flexible(
-                        child: Text(
-                          "'" + widget.name + "'",
+                          "'" + "Anonymous" + "'",
                           style: GoogleFonts.pacifico(
                               textStyle:
-                                  TextStyle(fontSize: 18, color: Colors.white)),
+                                  TextStyle(fontSize: 30, color: Colors.white)),
                         ),
                       )
                     ],
@@ -263,43 +258,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     children: [
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Flexible(
                             child: Text(
-                              'TOTAL GAMEPLAYS :',
+                              'Enter Room Code To See Board of the GamePlay',
                               style: fontdesign,
                             ),
                           ),
-                          Flexible(
-                            child: Text(
-                              gameplays.toString(),
-                              style: GoogleFonts.pacifico(
-                                  textStyle: TextStyle(
-                                      fontSize: 30, color: Colors.white)),
-                            ),
-                          ),
+                          
                         ],
                       ),
                       SizedBox(
                         height: 50,
-                      ),
-                      Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              'TOTAL WINS :   ',
-                              style: fontdesign,
-                            ),
-                          ),
-                          Flexible(
-                            child: Text(
-                              win.toString(),
-                              style: GoogleFonts.pacifico(
-                                  textStyle: TextStyle(
-                                      fontSize: 30, color: Colors.white)),
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),
@@ -309,36 +281,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    RaisedButton(
-                      color: Color(0xff1e272e),
-                      splashColor: Colors.grey,
-                      onPressed: () async {
-                        pr.show();
-                        final roomToken = await getRoomToken();
-                        print('==================');
-                        print(roomToken);
-                        pr.hide();
-                        //ListenPlayers(roomToken);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Roomscreen(
-                                    roomToken: roomToken.toString(),
-                                    name: widget.name)));
-                      },
-
-                      child: Text(
-                        'CREATE ROOM',
-                        style: GoogleFonts.nanumGothic(
-                            textStyle: TextStyle(
-                                fontSize: 12, color: Colors.white)),
-                      ),
-
-                      // child:
-                    ),
-                    SizedBox(
-                      width: 50,
-                    ),
+                   
                     RaisedButton(
                       color: Color(0xff1e272e),
                       splashColor: Colors.grey,
