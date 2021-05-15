@@ -1,5 +1,6 @@
 // import 'dart:htm
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:gamesnl/gamescreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -73,9 +74,9 @@ class _RoomscreenState extends State<Roomscreen> {
         print('not started');
       } else {
         print("game started");
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
                 builder: (context) =>
                     BoardScreen(roomToken: widget.roomToken)));
       }
@@ -226,15 +227,17 @@ class _RoomscreenState extends State<Roomscreen> {
                                       SizedBox(
                                         width: 2,
                                       ),
-                                      Text(
-                                        players[i]['name'],
-                                        style: GoogleFonts.roboto(
-                                            textStyle: TextStyle(
-                                                fontSize: 25,
-                                                color: Colors.white,
-                                                fontWeight: i == 0
-                                                    ? FontWeight.bold
-                                                    : FontWeight.normal)),
+                                      Flexible(
+                                        child: Text(
+                                          players[i]['name'],
+                                          style: GoogleFonts.roboto(
+                                              textStyle: TextStyle(
+                                                  fontSize: 25,
+                                                  color: Colors.white,
+                                                  fontWeight: i == 0
+                                                      ? FontWeight.bold
+                                                      : FontWeight.normal)),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -243,13 +246,13 @@ class _RoomscreenState extends State<Roomscreen> {
                         itemCount: players.length,
                       )
                     : Column(
-                      children: [
-                        Container(
-                            height:50,
-                            width: 50,
-                            child: CircularProgressIndicator()),
-                      ],
-                    ),
+                        children: [
+                          Container(
+                              height: 50,
+                              width: 50,
+                              child: CircularProgressIndicator()),
+                        ],
+                      ),
               ),
               SizedBox(
                 height: 30,

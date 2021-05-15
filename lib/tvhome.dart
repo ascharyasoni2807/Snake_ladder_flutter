@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gamesnl/Helperfunctions.dart';
 import 'package:gamesnl/signin.dart';
@@ -54,7 +55,7 @@ class _TVMyhomeState extends State<TVMyhome> {
 
     setUser(names, emails, uids) async {
       var url = getUrl('setUser');
-      String token =   await dbInstance.getToken();
+      String token = await dbInstance.getToken();
       final headers = {
         'authorization': 'Bearer $token',
         HttpHeaders.contentTypeHeader: 'application/json'
@@ -80,7 +81,9 @@ class _TVMyhomeState extends State<TVMyhome> {
         decoration: BoxDecoration(
             // color: Color(0xff3d3d3d),
             image: DecorationImage(
-          image: AssetImage('assets/images/woods.jpg',),
+          image: AssetImage(
+            'assets/images/woods.jpg',
+          ),
           fit: BoxFit.cover,
         )),
         // width: MediaQuery.of(context).size.width,
@@ -108,23 +111,23 @@ class _TVMyhomeState extends State<TVMyhome> {
                 child: RaisedButton(
                   splashColor: Colors.grey,
                   // ignore: deprecated_member_use
-                  onPressed: () async{
+                  onPressed: () async {
                     pr.show();
-                     dynamic result =  await  DatabaseMethods().signInAnon();
-                      User user = result ;
-                      print(user.uid);
+                    dynamic result = await DatabaseMethods().signInAnon();
+                    User user = result;
+                    print(user.uid);
 
-                  if (user!=null){
+                    if (user != null) {
                       Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProfileScreen(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => ProfileScreen(
                                     uid: user.uid,
-                                  ))
-                                  );
-                  }else {
-                    print('error');                  }
-                   
+                                  )));
+                    } else {
+                      print('error');
+                    }
+
                     // databasesMethods.signInWithGoogle().then((value) async {
                     //   // print(value);
 

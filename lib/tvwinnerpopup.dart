@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gamesnl/home.dart';
 import 'package:gamesnl/tvhome.dart';
@@ -51,7 +52,7 @@ class _WinnerpopupState extends State<Winnerpopup> {
                   try {
                     dbInstance.signOutGoogle();
                     Navigator.pushReplacement(context,
-                        new MaterialPageRoute(builder: (context) => TVMyhome()));
+                        new CupertinoPageRoute(builder: (context) => TVMyhome()));
                   } catch (e) {
                     print(e);
                   }

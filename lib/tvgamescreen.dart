@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:audioplayers/audio_cache.dart';
@@ -148,7 +149,7 @@ class _BoardState extends State<Board> {
         print('winner mem cahnce');
         Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
                 builder: (context) => Winnerpopup(
                     passname: valuesofplayer[memberChance - 1]['name'])));
         // winner();
@@ -224,7 +225,7 @@ class _BoardState extends State<Board> {
         print('winner mem cahnce');
         Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
                 builder: (context) =>
                     Winnerpopup(passname: valuesofplayer[mem - 1]['name'])));
         // winner();

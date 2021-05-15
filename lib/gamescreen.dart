@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:audioplayers/audio_cache.dart';
@@ -54,7 +55,7 @@ class _BoardState extends State<Board> {
 
   winningbox(name) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Navigator.of(context).push(MaterialPageRoute(
+      return Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Winnerpopup(
                 passname: name,
               )));
@@ -148,7 +149,7 @@ class _BoardState extends State<Board> {
         print('winner mem cahnce');
         Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
                 builder: (context) => Winnerpopup(
                     passname: valuesofplayer[memberChance - 1]['name'])));
         // winner();
@@ -194,7 +195,7 @@ class _BoardState extends State<Board> {
   void showInSnackBar(String value) {
     Scaffold.of(context).showSnackBar(new SnackBar(
       content: new Text(value),
-      backgroundColor: Colors.brown[800],
+      backgroundColor: Colors.red,
     ));
   }
 
@@ -204,8 +205,6 @@ class _BoardState extends State<Board> {
     FirebaseDatabase.instance
         .reference()
         .child('/rooms/room_' + widget.roomToken.toString() + '/players')
-        // .onValue
-        // .listen((event) {
         .once()
         .then((DataSnapshot snapshot) {
       print('in playerposition');
@@ -224,7 +223,7 @@ class _BoardState extends State<Board> {
         print('winner mem cahnce');
         Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
                 builder: (context) =>
                     Winnerpopup(passname: valuesofplayer[mem - 1]['name'])));
         // winner();
@@ -271,9 +270,10 @@ class _BoardState extends State<Board> {
 
   @override
   void initState() {
-    Board();
-    getCurrentUser();
+    // Board();
     readPlayers();
+    getCurrentUser();
+
     //playerPosition();
     print(widget.roomToken);
     liveDice();
@@ -403,7 +403,7 @@ class _BoardState extends State<Board> {
                                                   100
                                           // valuesofplayer[0]['position'] != null
                                           ? Container(
-                                              height: 20,
+                                              height: 11,
                                               alignment: Alignment.center,
                                               child: Image.asset(
                                                   'assets/images/tok0.png'))
@@ -670,7 +670,9 @@ class _BoardState extends State<Board> {
                 ),
                 Expanded(
                   child: Text(
-                    valuesofplayer[memberChance - 1]['name'],
+                    valuesofplayer.isNotEmpty
+                        ? valuesofplayer[memberChance - 1]['name']
+                        : 'Loading',
                     style: GoogleFonts.raleway(
                       fontWeight: FontWeight.bold,
                       fontSize: 22,
@@ -730,11 +732,12 @@ class _BoardState extends State<Board> {
                         print(a);
                       },
                       child: Opacity(
-                        opacity: valuesofplayer[memberChance - 1]
-                                    ['playerUID'] !=
-                                dbInstance.uid
-                            ? 0.5
-                            : 1.0,
+                        opacity: valuesofplayer.isNotEmpty
+                            ? valuesofplayer[memberChance - 1]['playerUID'] !=
+                                    dbInstance.uid
+                                ? 0.5
+                                : 1.0
+                            : 0.5,
                         child: Image.asset(
                           'assets/images/$diceNumber.png',
                           width: size.width * 0.3,
@@ -800,7 +803,7 @@ class _BoardState extends State<Board> {
                           },
                           itemCount: playersin.length,
                         )
-                      : CircularProgressIndicator(),
+                      : Center(child: CircularProgressIndicator()),
                 ),
               ],
             ),

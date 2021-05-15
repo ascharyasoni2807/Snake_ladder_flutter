@@ -1,5 +1,6 @@
 // import 'dart:htm
 // import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:gamesnl/tvgamescreen.dart';
 // import 'package:http/http.dart' as http;
 // import 'package:cloud_firestore/cloud_firestore.dart';
@@ -77,7 +78,7 @@ class _RoomscreenState extends State<Roomscreen> {
         print("game started");
         Navigator.push(
             context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
                 builder: (context) =>
                     BoardScreen(roomToken: widget.roomToken)));
       }

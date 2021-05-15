@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gamesnl/home.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -50,7 +51,7 @@ class _WinnerpopupState extends State<Winnerpopup> {
                   try {
                     dbInstance.signOutGoogle();
                     Navigator.pushReplacement(context,
-                        new MaterialPageRoute(builder: (context) => Myhome()));
+                        new CupertinoPageRoute(builder: (context) => Myhome()));
                   } catch (e) {
                     print(e);
                   }

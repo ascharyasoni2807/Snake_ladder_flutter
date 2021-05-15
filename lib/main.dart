@@ -25,12 +25,11 @@ void main() async {
   await Firebase.initializeApp();
 
   runApp(
-   
     Shortcuts(
-       shortcuts: <LogicalKeySet, Intent>{
+      shortcuts: <LogicalKeySet, Intent>{
         LogicalKeySet(LogicalKeyboardKey.select): const ActivateIntent(),
       },
-          child: MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: MyApp(),
       ),
@@ -45,7 +44,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool userIsloggedIn = false;
-  
 
   @override
   void initState() {
@@ -59,20 +57,10 @@ class _MyAppState extends State<MyApp> {
         //     ? Navigator.pushReplacement(context,
         //         MaterialPageRoute(builder: (context) => ProfileScreen()))
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Device()));
+            context, CupertinoPageRoute(builder: (context) => Device()));
       },
     );
   }
-
-  // getLoggedInfo() async {
-  //   await HelperFunctions.getUserLoggedInSharedPreference().then((value) {
-  //     setState(() {
-  //       print(value);
-  //       print("batao");
-  //       userIsloggedIn = value;
-  //     });
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +70,6 @@ class _MyAppState extends State<MyApp> {
     //     title: Text("loading g"),
     //   );
     return Scaffold(
-
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -112,8 +99,8 @@ class _MyAppState extends State<MyApp> {
                     Center(
                       child: Text("Loading Game",
                           style: GoogleFonts.ultra(
-                              textStyle:
-                                  TextStyle(color: Colors.white, fontSize: 14))),
+                              textStyle: TextStyle(
+                                  color: Colors.white, fontSize: 14))),
                     )
                   ],
                 ),
@@ -122,7 +109,6 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
-    
     );
   }
 }

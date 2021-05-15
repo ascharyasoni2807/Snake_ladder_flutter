@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter/material.dart';
@@ -136,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           // var resp = await http.post(url, headers: headers, body: body);
           Navigator.pushReplacement(
               context,
-              MaterialPageRoute(
+              CupertinoPageRoute(
                   builder: (context) => Roomscreen(
                         roomToken: roomtoken.toString(),
                       )));
@@ -200,7 +201,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 try {
                   databaseMethods.signOutGoogle();
                   Navigator.pushReplacement(context,
-                      new MaterialPageRoute(builder: (context) => TVMyhome()));
+                       CupertinoPageRoute(builder: (context) => TVMyhome()));
                 } catch (e) {
                   print(e);
                 }
