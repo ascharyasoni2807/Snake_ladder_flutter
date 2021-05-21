@@ -10,6 +10,7 @@ import 'package:gamesnl/winnerpopup.dart';
 import 'package:gamesnl/signin.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class BoardScreen extends StatelessWidget {
@@ -43,8 +44,9 @@ class Board extends StatefulWidget {
   _BoardState createState() => _BoardState();
 }
 
-class _BoardState extends State<Board> {
+class _BoardState extends State<Board> with SingleTickerProviderStateMixin {
   DatabaseMethods databaseMethods = dbInstance;
+  AnimationController _controller;
   int memberChance = 1;
   void playSound() {
     setState(() {
@@ -269,8 +271,19 @@ class _BoardState extends State<Board> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   void initState() {
     // Board();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
     readPlayers();
     getCurrentUser();
 
@@ -723,6 +736,7 @@ class _BoardState extends State<Board> {
                           // playerPosition();
                         } else {
                           playSound();
+                          _controller.forward();
                           //playerPosition();
                           diceNumber = await rollDiceChance();
 
@@ -732,17 +746,17 @@ class _BoardState extends State<Board> {
                         print(a);
                       },
                       child: Opacity(
-                        opacity: valuesofplayer.isNotEmpty
-                            ? valuesofplayer[memberChance - 1]['playerUID'] !=
-                                    dbInstance.uid
-                                ? 0.5
-                                : 1.0
-                            : 0.5,
-                        child: Image.asset(
-                          'assets/images/$diceNumber.png',
-                          width: size.width * 0.3,
-                        ),
-                      ),
+                          opacity: valuesofplayer.isNotEmpty
+                              ? valuesofplayer[memberChance - 1]['playerUID'] !=
+                                      dbInstance.uid
+                                  ? 0.5
+                                  : 1.0
+                              : 0.5,
+                          child: Container(
+                              child: Image.asset(
+                            'assets/images/$diceNumber.png',
+                            width: size.width * 0.3,
+                            ))),
                     ),
                   ),
                 ),

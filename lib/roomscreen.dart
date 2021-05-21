@@ -265,7 +265,7 @@ class _RoomscreenState extends State<Roomscreen> {
                         splashColor: Colors.grey[100],
                         onPressed: () {
                           setState(() {
-                            players.length < 1
+                            players.length <= 1
                                 ? print('not starting')
                                 : setgameState();
                           });

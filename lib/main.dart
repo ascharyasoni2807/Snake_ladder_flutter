@@ -13,10 +13,10 @@ import 'package:firebase_core/firebase_core.dart';
 //import 'package:snlgame/signin.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
-import 'Helperfunctions.dart';
+
 
 ProgressDialog pr;
 void main() async {
